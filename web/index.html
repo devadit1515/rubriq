@@ -58,17 +58,27 @@
         </div>
       </fieldset>
 
-      <details class="advanced">
-        <summary>Advanced</summary>
-        <div class="field">
-          <label for="audienceIn">Intended audience</label>
-          <input id="audienceIn" placeholder="e.g. children, general readers, expert clinicians">
+      <fieldset class="field field-tone">
+        <legend>Expected tone <span class="opt">sets the reading-level check</span></legend>
+        <div class="tone-row" role="radiogroup" aria-label="Expected tone">
+          <label class="tone-chip">
+            <input type="radio" name="tone" value="" data-audience="" checked>
+            <span>Neutral</span>
+          </label>
+          <label class="tone-chip">
+            <input type="radio" name="tone" value="simple, plain language" data-audience="general readers">
+            <span>Simple</span>
+          </label>
+          <label class="tone-chip">
+            <input type="radio" name="tone" value="professional" data-audience="professional">
+            <span>Professional</span>
+          </label>
+          <label class="tone-chip">
+            <input type="radio" name="tone" value="technical" data-audience="expert">
+            <span>Technical</span>
+          </label>
         </div>
-        <div class="field">
-          <label for="toneIn">Expected tone</label>
-          <input id="toneIn" placeholder="e.g. formal, playful, neutral">
-        </div>
-      </details>
+      </fieldset>
 
       <div class="actions">
         <button type="submit" class="btn btn-primary" id="evalBtn">Evaluate output</button>

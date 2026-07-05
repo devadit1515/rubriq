@@ -231,10 +231,10 @@
         <h2 class="sect">Parameter verdicts <span class="count">· ${scored.length} scored, ${nFindings} findings</span></h2>
         ${rep.parameters.map(verdictHtml).join("")}
 
-        <h2 class="sect">Repair prompts <span class="count">· targeted at ${esc(FAMILY_LABELS[(rep.improvement_prompts[0] || {}).model_family] || "your model")}</span></h2>
+        <h2 class="sect">The repaired prompt <span class="count">· one paste-ready fix for everything found · ${esc(FAMILY_LABELS[(rep.improvement_prompts[0] || {}).model_family] || "your model")}</span></h2>
         ${rep.improvement_prompts.length
           ? rep.improvement_prompts.map(repairHtml).join("")
-          : '<p class="no-repairs">No repairs needed — every locally checkable parameter came back clean. If the output still feels wrong, the issue likely lives in the judge-mode territory listed above.</p>'}
+          : '<p class="no-repairs">No repair needed — every locally checkable parameter came back clean. If the output still feels wrong, the issue likely lives in the judge-mode territory listed above.</p>'}
       </div>`;
 
     // meter fill animation (double rAF so the 0-scale paints first)
@@ -268,7 +268,10 @@
       prompt: $("promptIn").value,
       output: $("outputIn").value,
       model_name: composedModelName(),
-      options: { audience: $("audienceIn").value.trim(), tone: $("toneIn").value.trim(), weights: {} },
+      options: (() => {
+        const tone = form.querySelector('input[name="tone"]:checked');
+        return { audience: tone?.dataset.audience || "", tone: tone?.value || "", weights: {} };
+      })(),
     };
     evalBtn.disabled = true;
     evalBtn.textContent = "Evaluating…";

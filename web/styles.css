@@ -248,18 +248,43 @@ fieldset.field-model legend {
 .combo-list li.co-empty { color: var(--muted); cursor: default; }
 .combo-list li.co-empty:hover { background: transparent; }
 
-.advanced { margin: 4px 0 16px; }
-.advanced summary {
-  cursor: pointer;
+/* tone selector */
+fieldset.field-tone { border: 0; padding: 0; margin: 0 0 16px; }
+fieldset.field-tone legend {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-  padding: 4px 0;
-  user-select: none;
-  list-style-position: outside;
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding: 0;
 }
-.advanced summary:hover { color: var(--ink); }
-.advanced[open] summary { margin-bottom: 10px; }
+.tone-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tone-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.tone-chip span {
+  display: inline-block;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 150ms var(--ease), background 150ms var(--ease), color 150ms var(--ease);
+}
+.tone-chip span:hover { border-color: var(--primary); }
+.tone-chip input:checked + span {
+  background: var(--primary-tint);
+  border-color: var(--primary);
+  color: var(--primary-deep);
+  font-weight: 600;
+}
+.tone-chip input:focus-visible + span {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
 
 .actions { display: flex; gap: 10px; margin: 20px 0 0; }
 .btn {
