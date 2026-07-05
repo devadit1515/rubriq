@@ -92,6 +92,26 @@ def test_no_empty_coverage_repair_on_code():
             assert 'e.g. ""' not in ip.diagnosis
 
 
+def test_family_detection_current_models():
+    from rubriq.prompts.model_profiles import detect_family
+    cases = {
+        "OpenAI GPT-5.6 Sol (preview)": ModelFamily.GPT,
+        "OpenAI o3": ModelFamily.GPT,
+        "Anthropic Claude Fable 5": ModelFamily.CLAUDE,
+        "Google Gemini 3.5 Flash": ModelFamily.GEMINI,
+        "Meta Llama 4 Maverick": ModelFamily.OPEN_WEIGHTS,
+        "DeepSeek V4 Pro": ModelFamily.OPEN_WEIGHTS,
+        "Z.ai GLM-5.1": ModelFamily.OPEN_WEIGHTS,
+        "MiniMax M3": ModelFamily.OPEN_WEIGHTS,
+        "Mistral Devstral 2": ModelFamily.OPEN_WEIGHTS,
+        "xAI Grok 4.3": ModelFamily.GENERIC,
+        "Cohere Command A": ModelFamily.GENERIC,
+        "": ModelFamily.GENERIC,
+    }
+    for name, family in cases.items():
+        assert detect_family(name) == family, f"{name!r} -> {detect_family(name)}"
+
+
 def test_technique_sources_cited():
     report = run(samples.SUMM_PROMPT, samples.SUMM_BAD, model="gpt-4o")
     for ip in report.improvement_prompts:

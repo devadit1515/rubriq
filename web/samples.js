@@ -17,7 +17,8 @@ researchers today.`;
     {
       label: "Sabotaged summary",
       hint: "invented facts + blown word limit",
-      model: "gpt-4o",
+      provider: "OpenAI",
+      model: "GPT-5.5",
       prompt: "Summarize the following text in at most 60 words.\n\n" + ARTICLE,
       output:
         "The famous 1987 Larsen Glacier expedition, led by the celebrated Dr. Ingrid " +
@@ -32,7 +33,8 @@ researchers today.`;
     {
       label: "Faithful summary",
       hint: "the same task, done right",
-      model: "claude sonnet",
+      provider: "Anthropic",
+      model: "Claude Sonnet 5",
       prompt: "Summarize the following text in at most 60 words.\n\n" + ARTICLE,
       output:
         "In 1987, Dr. Ingrid Solheim led a twelve-person Norwegian expedition that " +
@@ -44,7 +46,8 @@ researchers today.`;
     {
       label: "Broken code",
       hint: "syntax error + wrong function name",
-      model: "llama-3.1-70b",
+      provider: "Meta",
+      model: "Llama 4 Maverick",
       prompt:
         "Write a Python function called parse_log_line that takes a log line like " +
         "'2024-01-03 ERROR disk full' and returns a dict with keys date, level, " +
@@ -56,7 +59,8 @@ researchers today.`;
     {
       label: "Confident nonsense",
       hint: "fabricated citations & statistics",
-      model: "gemini 2.0 pro",
+      provider: "Google",
+      model: "Gemini 3.5 Flash",
       prompt: "What are the health benefits of intermittent fasting?",
       output:
         "Intermittent fasting has remarkable health benefits. Studies show that it " +

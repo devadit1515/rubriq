@@ -267,7 +267,7 @@
     const payload = {
       prompt: $("promptIn").value,
       output: $("outputIn").value,
-      model_name: $("modelIn").value.trim(),
+      model_name: composedModelName(),
       options: { audience: $("audienceIn").value.trim(), tone: $("toneIn").value.trim(), weights: {} },
     };
     evalBtn.disabled = true;
@@ -309,6 +309,118 @@
     }
   }
 
+  // ---------- model picker (two searchable comboboxes) ----------
+  const PROVIDERS = window.RUBRIQ_PROVIDERS || [];
+  const providerIn = $("providerIn");
+
+  function composedModelName() {
+    const provider = providerIn.value.trim();
+    const model = $("modelIn").value.trim();
+    if (!model) return provider === "Other" ? "" : provider;
+    if (!provider || provider === "Other") return model;
+    return model.toLowerCase().startsWith(provider.toLowerCase()) ? model : `${provider} ${model}`;
+  }
+
+  function makeCombo(rootSel, opts) {
+    const root = document.querySelector(rootSel);
+    const input = root.querySelector("input");
+    const toggle = root.querySelector(".combo-toggle");
+    const list = root.querySelector(".combo-list");
+    let items = [];
+    let active = -1;
+
+    function close() {
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      active = -1;
+    }
+    function render(filter) {
+      const q = (filter ?? "").trim().toLowerCase();
+      items = opts.items().filter((it) =>
+        !q || it.label.toLowerCase().includes(q) || (it.meta || "").toLowerCase().includes(q));
+      list.innerHTML = "";
+      if (!items.length) {
+        const li = document.createElement("li");
+        li.className = "co-empty";
+        li.textContent = opts.emptyText || "No matches — free text is fine";
+        list.appendChild(li);
+      }
+      items.forEach((it, i) => {
+        const li = document.createElement("li");
+        li.setAttribute("role", "option");
+        li.id = `${input.id}-opt-${i}`;
+        li.textContent = it.label;
+        if (it.meta) {
+          const m = document.createElement("span");
+          m.className = "co-provider";
+          m.textContent = it.meta;
+          li.appendChild(m);
+        }
+        // mousedown (not click) so it fires before the input's blur
+        li.addEventListener("mousedown", (e) => { e.preventDefault(); pick(i); });
+        list.appendChild(li);
+      });
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+    function pick(i) {
+      const it = items[i];
+      if (!it) return;
+      input.value = it.label;
+      close();
+      opts.onPick(it);
+    }
+    function setActive(i) {
+      active = (i + items.length) % Math.max(1, items.length);
+      [...list.querySelectorAll("[role=option]")].forEach((el, j) => {
+        el.setAttribute("aria-selected", String(j === active));
+        if (j === active) el.scrollIntoView({ block: "nearest" });
+      });
+      input.setAttribute("aria-activedescendant", `${input.id}-opt-${active}`);
+    }
+    input.addEventListener("input", () => render(input.value));
+    input.addEventListener("focus", () => render(input.value));
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") { e.preventDefault(); if (list.hidden) render(input.value); setActive(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === "Enter" && !list.hidden && active >= 0) { e.preventDefault(); pick(active); }
+      else if (e.key === "Escape") { close(); }
+      else if (e.key === "Tab") { close(); }
+    });
+    input.addEventListener("blur", () => setTimeout(close, 120));
+    toggle.addEventListener("click", () => {
+      if (list.hidden) { input.focus(); render(""); } else close();
+    });
+    return { close };
+  }
+
+  makeCombo('[data-combo="provider"]', {
+    items: () => PROVIDERS.map((p) => ({ label: p.name })),
+    onPick: (it) => {
+      const prov = PROVIDERS.find((p) => p.name === it.label);
+      if (prov && !prov.models.some((m) => m === $("modelIn").value)) $("modelIn").value = "";
+      $("modelIn").focus();
+    },
+    emptyText: "No such provider — free text is fine",
+  });
+
+  makeCombo('[data-combo="model"]', {
+    items: () => {
+      const prov = PROVIDERS.find((p) => p.name === providerIn.value.trim());
+      if (prov && prov.models.length) return prov.models.map((m) => ({ label: m }));
+      // no provider chosen: search everything, most-popular model of each provider first
+      const rows = [];
+      for (let rank = 0; rank < 8; rank++) {
+        for (const p of PROVIDERS) {
+          if (p.models[rank]) rows.push({ label: p.models[rank], meta: p.name });
+        }
+      }
+      return rows;
+    },
+    onPick: (it) => { if (it.meta) providerIn.value = it.meta; },
+    emptyText: "Not listed — type the model name",
+  });
+
   form.addEventListener("submit", (e) => { e.preventDefault(); evaluate(); });
   $("clearBtn").addEventListener("click", () => {
     form.reset();
@@ -327,6 +439,7 @@
     b.addEventListener("click", () => {
       $("promptIn").value = s.prompt;
       $("outputIn").value = s.output;
+      providerIn.value = s.provider || "";
       $("modelIn").value = s.model;
       evaluate();
     });

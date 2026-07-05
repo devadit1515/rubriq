@@ -15,9 +15,11 @@ from ..schemas import ModelFamily
 
 _FAMILY_PATTERNS = [
     (ModelFamily.CLAUDE, re.compile(r"(?i)claude|anthropic|sonnet|opus|haiku|fable")),
-    (ModelFamily.GPT, re.compile(r"(?i)gpt|openai|o[134][\b-]|chatgpt|davinci")),
+    (ModelFamily.GPT, re.compile(r"(?i)gpt|openai|\bo[134](?:\b|-)|chatgpt|davinci|\bsol\b|\bterra\b|\bluna\b")),
     (ModelFamily.GEMINI, re.compile(r"(?i)gemini|bard|google|palm")),
-    (ModelFamily.OPEN_WEIGHTS, re.compile(r"(?i)llama|mistral|mixtral|qwen|deepseek|phi-|falcon|vicuna|ollama")),
+    (ModelFamily.OPEN_WEIGHTS, re.compile(
+        r"(?i)llama|mistral|mixtral|devstral|codestral|qwen|deepseek|phi-|falcon|vicuna|ollama|"
+        r"\bglm\b|glm-|minimax|kimi|moonshot")),
 ]
 
 

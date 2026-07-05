@@ -40,16 +40,23 @@
           placeholder="Paste the model's full response." required></textarea>
       </div>
 
-      <div class="field field-model">
-        <label for="modelIn">Which model produced it <span class="opt">optional — tunes the repair prompts</span></label>
-        <input id="modelIn" list="modelList" placeholder="e.g. gpt-4o, claude sonnet, gemini, llama-3">
-        <datalist id="modelList">
-          <option value="gpt-4o"></option><option value="gpt-4.1"></option>
-          <option value="claude sonnet"></option><option value="claude opus"></option>
-          <option value="gemini 2.0 pro"></option><option value="llama-3.1-70b"></option>
-          <option value="mistral large"></option>
-        </datalist>
-      </div>
+      <fieldset class="field field-model">
+        <legend>Which model produced it <span class="opt">optional — tunes the repair prompts</span></legend>
+        <div class="combo-row">
+          <div class="combo" data-combo="provider">
+            <input id="providerIn" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   aria-controls="providerList" placeholder="Provider" aria-label="Provider">
+            <button type="button" class="combo-toggle" tabindex="-1" aria-hidden="true">▾</button>
+            <ul class="combo-list" id="providerList" role="listbox" hidden></ul>
+          </div>
+          <div class="combo" data-combo="model">
+            <input id="modelIn" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   aria-controls="modelList" placeholder="Model" aria-label="Model">
+            <button type="button" class="combo-toggle" tabindex="-1" aria-hidden="true">▾</button>
+            <ul class="combo-list" id="modelList" role="listbox" hidden></ul>
+          </div>
+        </div>
+      </fieldset>
 
       <details class="advanced">
         <summary>Advanced</summary>
@@ -82,6 +89,7 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="models.js"></script>
 <script src="samples.js"></script>
 <script src="app.js"></script>
 </body>
