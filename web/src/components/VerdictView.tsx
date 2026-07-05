@@ -101,7 +101,7 @@ export default function VerdictView({ report, output, source, onReset }: Props) 
       {/* HERO — the score dominates */}
       <motion.div variants={revealContainer} initial="hidden" animate="shown" className="flex flex-col items-center">
         <motion.div variants={revealChild}>
-          <ScoreGauge value={overall} tier={tier} word={overallWord(overall)} phase="live" size={340} />
+          <ScoreGauge value={overall} tier={tier} word={overallWord(overall)} size={340} />
         </motion.div>
         <motion.p variants={revealChild} className="prose-measure mt-4 text-center text-[0.9rem]" style={{ color: "var(--text-mut)" }}>
           {report.overall.note}

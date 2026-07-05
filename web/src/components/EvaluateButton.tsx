@@ -26,6 +26,7 @@ export default function EvaluateButton({ running, disabled, onEvaluate, onCancel
   };
 
   const inert = disabled && !running;
+  const quiet = running || inert; // muted glass, not the lit green key
 
   return (
     <motion.button
@@ -41,17 +42,17 @@ export default function EvaluateButton({ running, disabled, onEvaluate, onCancel
       className="relative flex h-[52px] w-full items-center justify-center gap-2.5 overflow-hidden rounded-[var(--r-md)] font-semibold"
       style={{
         cursor: inert ? "not-allowed" : "pointer",
-        background: running
+        background: quiet
           ? "linear-gradient(180deg, var(--glass-2), var(--glass))"
           : "linear-gradient(180deg, oklch(0.88 0.15 162), oklch(0.78 0.16 160))",
-        color: running ? "var(--text-dim)" : "oklch(0.16 0.03 160)",
-        boxShadow: running
+        color: quiet ? "var(--text-dim)" : "oklch(0.16 0.03 160)",
+        boxShadow: quiet
           ? "var(--shadow-glass)"
           : "0 1px 0 0 oklch(1 0 0 / 0.4) inset, 0 10px 30px -8px var(--ink-glow), 0 2px 10px -2px oklch(0 0 0 / 0.5)",
-        opacity: inert ? 0.5 : 1,
+        opacity: inert ? 0.7 : 1,
       }}
     >
-      {!running && <motion.span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: spec }} />}
+      {!quiet && <motion.span aria-hidden className="pointer-events-none absolute inset-0" style={{ background: spec }} />}
       <AnimatePresence mode="wait" initial={false}>
         {running ? (
           <motion.span

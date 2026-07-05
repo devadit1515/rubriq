@@ -22,6 +22,7 @@ interface RunArgs {
 export default function App() {
   const [prompt, setPrompt] = useState("");
   const [output, setOutput] = useState("");
+  const [provider, setProvider] = useState("");
   const [model, setModel] = useState("");
   const [tone, setTone] = useState("");
 
@@ -115,10 +116,17 @@ export default function App() {
     setRunning(false);
   }, []);
 
+  // Changing provider resets the model, so the model list always matches.
+  const changeProvider = useCallback((pv: string) => {
+    setProvider(pv);
+    setModel("");
+  }, []);
+
   const pickSample = useCallback(
     (s: DemoSample) => {
       setPrompt(s.prompt);
       setOutput(s.output);
+      setProvider(s.provider);
       setModel(s.model);
       setTone("");
       runEval({ prompt: s.prompt, output: s.output, model: s.model, tone: "" });
@@ -159,10 +167,12 @@ export default function App() {
                   key="intake"
                   prompt={prompt}
                   output={output}
+                  provider={provider}
                   model={model}
                   tone={tone}
                   setPrompt={setPrompt}
                   setOutput={setOutput}
+                  setProvider={changeProvider}
                   setModel={setModel}
                   setTone={setTone}
                   running={running}

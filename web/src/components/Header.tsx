@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import type { EngineState } from "../lib/api";
 import StatusPill from "./StatusPill";
-import MotionToggle from "./MotionToggle";
 import { EASE_OUT_EXPO } from "../lib/motion";
 
 export default function Header({ engine, children }: { engine: EngineState; children?: ReactNode }) {
@@ -37,9 +36,6 @@ export default function Header({ engine, children }: { engine: EngineState; chil
         </a>
         <div className="flex items-center gap-2.5">
           {children}
-          <div className="hidden md:block">
-            <MotionToggle />
-          </div>
           <StatusPill state={engine} />
         </div>
       </div>
