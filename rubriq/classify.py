@@ -28,7 +28,8 @@ _DELIM_BLOCK = re.compile(
 )
 _SOURCE_INTRO = re.compile(
     r"(?i)(?:following (?:text|article|document|passage|email|report|code|excerpt|transcript|paragraph)s?|"
-    r"text below|below is|here is the (?:text|article|document|passage|code)|this (?:text|article|document))\s*[:.]?\s*\n"
+    r"text below|below is|here is the (?:text|article|document|passage|code)|this (?:text|article|document))"
+    r"[^\n]*\n"
 )
 
 
@@ -53,14 +54,14 @@ def split_instruction_and_source(prompt: str) -> tuple[str, str | None]:
     if m:
         source = prompt[m.end():].strip()
         instruction = prompt[:m.end()].strip()
-        if word_count(source) >= 40:
+        if word_count(source) >= 30:
             return instruction, source
 
     # Length heuristic: short first paragraph, long remainder.
     parts = prompt.split("\n", 1)
     if len(parts) == 2:
         head, rest = parts[0].strip(), parts[1].strip()
-        if head and word_count(head) <= 60 and word_count(rest) >= 150 and _looks_instructional(head):
+        if head and word_count(head) <= 60 and word_count(rest) >= 60 and _looks_instructional(head):
             return head, rest
 
     return prompt.strip(), None
@@ -95,6 +96,10 @@ _RULES: list[tuple[TaskType, str, re.Pattern]] = [
      re.compile(r"(?i)\b(rewrite|rephrase|paraphrase|edit|proofread|improve|polish|make (?:this|it) (?:more|less|sound)|change the tone|translate)\b")),
     (TaskType.QA_OPEN, "prompt asks a direct question",
      re.compile(r"(?i)^(?:please\s+)?(what|who|when|where|why|how|which|is|are|does|do|can|could|should|explain)\b")),
+    (TaskType.QA_OPEN, "prompt asks to answer questions",
+     re.compile(r"(?i)\banswer (?:the |these |the following |my )?questions?\b")),
+    (TaskType.QA_OPEN, "prompt contains interrogative sentences",
+     re.compile(r"(?:^|[.!?]\s+)(?:What|Who|When|Where|Why|How|Which)\b[^.\n?]*\?")),
 ]
 
 _CODE_FENCE = re.compile(r"```")

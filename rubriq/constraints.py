@@ -80,7 +80,7 @@ _INCLUDE_PAT = re.compile(
 )
 _EXCLUDE_PAT = re.compile(
     r"(?i)\b(?:do not|don'?t|never|avoid)\s+"
-    r"(?:use|mention|include|say)(?:\s+the\s+(?:word|term|phrase)s?)?\s+[\"“']([^\"”']{2,60})[\"”']"
+    r"(?:us(?:e|ing)|mention(?:ing)?|includ(?:e|ing)|say(?:ing)?)(?:\s+the\s+(?:word|term|phrase)s?)?\s+[\"“']([^\"”']{2,60})[\"”']"
 )
 _START_PAT = re.compile(r"(?i)\b(?:begin|start)\s+(?:your\s+)?(?:response|answer|output|reply|with)?\s*with\s+[\"“']([^\"”']{2,80})[\"”']")
 _END_PAT = re.compile(r"(?i)\bend\s+(?:your\s+)?(?:response|answer|output|reply)?\s*with\s+[\"“']([^\"”']{2,80})[\"”']")

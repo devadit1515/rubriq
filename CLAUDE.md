@@ -74,6 +74,7 @@ model), and the entire improvement-prompt template library.
 | No ROUGE/BLEU | n-gram metrics excluded everywhere | SummEval showed weak human correlation; embedding + NLI methods used instead. |
 | No code execution in v1 | static analysis ladder for code tasks | Executing arbitrary pasted code is a safety/dependency problem; HumanEval-style pass@k logged as judge-mode-era future work. |
 | No toxicity metric in v1 | deferred | Lexicon approaches false-positive heavily; a proper local classifier is future work. |
+| Question coverage is a topical proxy | flag a question part only when its topic/keywords are absent from the output | Empirically verified (2026-07-05) that bi-encoder similarity cannot distinguish "mentioned" from "answered" (unanswered part scored 0.65 vs answered 0.59). Labeled is_proxy, limitation documented in a dedicated test; true answerhood is judge-mode work. |
 | Scoring adapter | `Scorer` interface with `LocalScorer` now; `LLMJudgeScorer` later (BYO-key free tier, our-key paid tier) | Required by brief. Interface lands in Step 1. |
 | Frontend | Decided at Step 2 (leaning React/Next.js + Vercel) | Not needed before Checkpoint 2. |
 | Document evaluation | Deferred decision until the text pipeline exists | Include only if nearly free per brief. |
@@ -122,9 +123,16 @@ Work autonomously between checkpoints; stop and wait at each one.
   CLAUDE.md created, names proposed.
 - 2026-07-05 — **Checkpoint 1 passed**: name = Rubriq. Folder rename deferred
   by user (still `LLM Quality` on disk — harmless, git doesn't care). Repo
-  `devadit1515/rubriq` created and pushed. **Step 1 underway**: research →
-  RESEARCH.md → classifier → taxonomy → scoring engine → prompt generator →
-  tests. Next stop: Checkpoint 2 (user review + Supabase credentials).
+  `devadit1515/rubriq` created and pushed.
+- 2026-07-05 — **Step 1 complete**: RESEARCH.md (all sources logged),
+  classifier (rules + bge prototypes + source split), IFEval-style constraint
+  engine, metric modules (SummaC-ZS faithfulness, relevance, readability,
+  lexical, hallucination signals, static code ladder), Scorer adapter +
+  LocalScorer, improvement-prompt generator (failure × task × model family),
+  FastAPI app, 44 tests green on curated planted-failure pairs. Demo pair
+  verified end-to-end: sabotaged summary scores 33/100 with all four planted
+  fabrications quoted. **Waiting at Checkpoint 2**: user reviews, sets up
+  Supabase, hands over credentials; Step 2 (frontend + deploy) after that.
 
 ## Future work log
 

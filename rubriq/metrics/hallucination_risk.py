@@ -17,7 +17,7 @@ from ..textutils import snippet
 
 _SIGNALS: list[tuple[str, re.Pattern, str]] = [
     ("citation_pattern",
-     re.compile(r"\([A-Z][A-Za-z-]+(?: (?:et al\.?|&|and) [A-Z][A-Za-z-]+)?,? (?:19|20)\d{2}\)|\[[0-9]{1,3}\]"),
+     re.compile(r"\([A-Z][A-Za-z-]+(?:\s+et al\.?|\s+(?:&|and)\s+[A-Z][A-Za-z-]+)?,?\s+(?:19|20)\d{2}\)|\[[0-9]{1,3}\]"),
      "citation-shaped reference — LLMs fabricate plausible-looking citations; verify each one exists"),
     ("case_or_statute",
      re.compile(r"\b[A-Z][a-z]+ v\.? [A-Z][a-z]+\b|\b\d+ U\.S\.C?\.? §? ?\d+\b"),
