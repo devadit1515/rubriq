@@ -39,9 +39,15 @@ def call_gemini(
     if json_mode:
         body["generationConfig"]["responseMimeType"] = "application/json"
 
-    url = _ENDPOINT.format(model=model) + f"?key={api_key}"
+    # Key travels in a header, never the URL — URLs get logged by proxies/servers.
+    url = _ENDPOINT.format(model=model)
     data = json.dumps(body).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"}, method="POST")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
+        method="POST",
+    )
 
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:

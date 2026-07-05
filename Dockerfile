@@ -20,7 +20,9 @@ RUN pip install --no-cache-dir --user .
 # Bake both models into the image so cold starts skip the download.
 RUN python -c "from rubriq.models import availability; a = availability(); assert all(a.values()), a"
 
-COPY --chown=user web ./web
+# API-only: the frontend lives on Vercel and reaches this engine via rewrites, so
+# the image ships no web assets. (If a web/dist is mounted at runtime it is served,
+# but the deployed engine does not carry one.)
 
 EXPOSE 7860
 CMD ["uvicorn", "rubriq.api.main:app", "--host", "0.0.0.0", "--port", "7860"]
