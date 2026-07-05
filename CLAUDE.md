@@ -140,9 +140,17 @@ Work autonomously between checkpoints; stop and wait at each one.
   Hosting decision: **frontend → Vercel, engine → HF Spaces Docker**
   (Render free tier's 512MB can't hold torch + DeBERTa; HF free tier has
   16GB). Dockerfile + README Space frontmatter + web/vercel.json ready;
-  DEPLOY.md has the runbook. **Blocked on user auth**: user will run
-  `npx vercel login` (own account, not kapilchordia) and create an HF
-  write token, then both deploys are one command each.
+  DEPLOY.md has the runbook.
+- 2026-07-05 — **DEPLOYED.** Frontend: https://rubriq-liard.vercel.app
+  (Vercel, project `rubriq`, account devadit1515). Engine:
+  https://devadit15-rubriq.hf.space (HF Space devadit15/rubriq, Docker,
+  models baked in, free tier — sleeps after ~48h idle, UI pill handles the
+  wake). Live E2E verified: sabotaged-summary sample scores 33 with 4
+  repair cards through the deployed stack. Redeploy: `git push hf main`
+  (engine; needs HF auth) / `npx vercel deploy --prod --yes` from web/
+  (frontend). User's HF token was pasted in chat — advise revoke + re-auth
+  via `hf auth login` when next needed. Still open: mentor review +
+  Supabase (deferred Checkpoint 2 items).
 
 ## Future work log
 
