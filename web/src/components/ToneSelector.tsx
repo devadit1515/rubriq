@@ -1,8 +1,8 @@
-// Expected tone/register, sent through EvalOptions.tone. Segmented dial; the lit
-// segment slides between options via a shared layoutId — one indicator, not five.
-import { motion } from "framer-motion";
+// Expected tone/register, sent through EvalOptions.tone. A plain segmented dial.
+// Deliberately NO shared-layout (layoutId) indicator: a pending layout animation
+// here deadlocks the intake→verdict AnimatePresence(mode="wait") transition, which
+// is what made "change the tone → no output" happen. Per-chip background only.
 import { TONES } from "../lib/providers";
-import { GLASS } from "../lib/motion";
 
 interface Props {
   value: string;
@@ -31,25 +31,16 @@ export default function ToneSelector({ value, onChange }: Props) {
               aria-checked={on}
               title={t.hint}
               onClick={() => onChange(t.id)}
-              className="relative flex-1 rounded-[9px] px-2 py-2 text-center"
+              className="relative flex-1 rounded-[9px] px-2 py-2.5 text-center text-[0.84rem]"
+              style={{
+                background: on ? "oklch(0.85 0.14 160 / 0.12)" : "transparent",
+                boxShadow: on ? "0 0 0 1px var(--ink-soft) inset" : "none",
+                color: on ? "var(--ink)" : "var(--text-dim)",
+                fontWeight: on ? 600 : 400,
+                transition: "background 200ms, color 200ms, box-shadow 200ms",
+              }}
             >
-              {on && (
-                <motion.span
-                  layoutId="tone-active"
-                  transition={GLASS}
-                  className="absolute inset-0 rounded-[9px]"
-                  style={{
-                    background: "oklch(0.85 0.14 160 / 0.14)",
-                    boxShadow: "0 0 0 1px var(--ink-soft) inset, 0 0 20px -8px var(--ink-glow)",
-                  }}
-                />
-              )}
-              <span
-                className="relative text-[0.8rem]"
-                style={{ color: on ? "var(--ink)" : "var(--text-dim)", fontWeight: on ? 600 : 400 }}
-              >
-                {t.label}
-              </span>
+              {t.label}
             </button>
           );
         })}

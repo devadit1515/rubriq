@@ -19,18 +19,18 @@ export default function JudgePanel({ enabled, apiKey, model, onToggle, onKey, on
   const [show, setShow] = useState(false);
 
   return (
-    <div className="glass overflow-hidden p-4 sm:p-5" style={{ boxShadow: enabled ? "0 0 0 1px var(--ink-soft) inset, var(--shadow-glass)" : "var(--shadow-glass)" }}>
+    <div className="glass overflow-hidden p-5 sm:p-6" style={{ boxShadow: enabled ? "0 0 0 1px var(--ink-soft) inset, var(--shadow-glass)" : "var(--shadow-glass)" }}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="etch" style={{ color: enabled ? "var(--ink)" : "var(--text-mut)" }}>
+            <span className="text-[0.95rem] font-semibold" style={{ color: enabled ? "var(--ink)" : "var(--text)" }}>
               LLM judge · Gemini
             </span>
-            <span className="rounded px-1.5 py-0.5 font-mono" style={{ fontSize: "0.54rem", color: "var(--text-mut)", background: "oklch(0.5 0.02 260 / 0.2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <span className="rounded px-1.5 py-0.5 font-mono" style={{ fontSize: "0.56rem", color: "var(--text-mut)", background: "oklch(0.5 0.02 260 / 0.2)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
               your key
             </span>
           </div>
-          <p className="mt-1.5 text-[0.82rem] leading-snug" style={{ color: "var(--text-dim)" }}>
+          <p className="mt-2 text-[0.88rem] leading-snug" style={{ color: "var(--text-dim)" }}>
             Add real factual-accuracy checking, a second opinion on the faithfulness flags, and a sharper repair prompt.
           </p>
         </div>

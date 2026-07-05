@@ -47,7 +47,7 @@ export default function RepairPrompt({ prompt, problems, active }: Props) {
       className="relative mx-auto w-full max-w-[880px]"
       aria-label="The repaired prompt"
     >
-      <div aria-hidden className="absolute -inset-x-8 -top-10 h-40 bloom" style={{ opacity: 0.5 }} />
+      <div aria-hidden className="absolute -inset-x-8 -top-10 h-40 bloom" style={{ opacity: 0.28 }} />
 
       <div
         className="glass relative overflow-hidden p-5 sm:p-7"

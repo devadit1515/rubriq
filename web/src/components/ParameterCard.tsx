@@ -42,7 +42,7 @@ export default function ParameterCard({ param, index, keyToAnchor, activeAnchor,
       className="glass flex flex-col p-4 sm:p-5"
       style={{
         boxShadow: cardActive
-          ? `0 0 0 1px ${color} inset, 0 0 30px -10px ${color}, var(--shadow-glass)`
+          ? `0 0 0 1px ${color} inset, 0 0 16px -12px ${color}, var(--shadow-glass)`
           : `0 0 0 1px oklch(from ${color} l c h / ${ringAlpha}) inset, var(--shadow-glass)`,
       }}
     >
@@ -91,7 +91,7 @@ export default function ParameterCard({ param, index, keyToAnchor, activeAnchor,
         {!notScored && (
           <motion.div
             className="h-full origin-left rounded-full"
-            style={{ background: color, boxShadow: tier === "weak" ? `0 0 10px ${color}` : "none" }}
+            style={{ background: color }}
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: (score ?? 0) / 100 }}
             viewport={{ once: true, margin: "-10%" }}

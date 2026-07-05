@@ -79,15 +79,15 @@ export default function ScoreGauge({ value, tier, word, size = 340 }: Props) {
           width: size * 0.7,
           height: size * 0.7,
           background: `radial-gradient(closest-side, ${color}, transparent 70%)`,
-          opacity: 0.24,
-          filter: "blur(14px)",
+          opacity: 0.1,
+          filter: "blur(16px)",
         }}
       />
 
       <svg viewBox="0 0 200 200" width={size} height={size} className="absolute inset-0" aria-hidden>
         <defs>
           <filter id="gaugeGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="2.6" result="b" />
+            <feGaussianBlur stdDeviation="1.2" result="b" />
             <feMerge>
               <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />

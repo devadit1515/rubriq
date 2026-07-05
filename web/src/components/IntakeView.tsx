@@ -50,7 +50,7 @@ export default function IntakeView(p: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.97, filter: "blur(10px)" }}
       transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-      className="mx-auto w-full max-w-[1120px] px-5 pb-28 pt-16 sm:px-8 sm:pt-24"
+      className="mx-auto w-full max-w-[1280px] px-5 pb-28 pt-16 sm:px-8 sm:pt-24"
     >
       <motion.div variants={revealContainer} initial="hidden" animate="shown" className="flex flex-col items-center">
         <motion.h1
@@ -98,18 +98,18 @@ export default function IntakeView(p: Props) {
         </motion.div>
       </motion.div>
 
-      <motion.div variants={revealChild} initial="hidden" animate="shown" className="mx-auto mt-14 max-w-[860px]">
+      <motion.div variants={revealChild} initial="hidden" animate="shown" className="mx-auto mt-14 max-w-[1040px]">
         <SampleChips onPick={p.onPickSample} />
       </motion.div>
 
-      <div className="mx-auto mt-6 max-w-[860px]">
-        <div className="grid gap-3.5 md:grid-cols-2">
+      <div className="mx-auto mt-6 max-w-[1040px]">
+        <div className="grid gap-4 md:grid-cols-2">
           <GlassField
             label="The prompt you gave"
             value={p.prompt}
             onChange={p.setPrompt}
             placeholder="Paste the instruction you sent the model — include any source text it was asked to work from."
-            minHeight={170}
+            minHeight={250}
           />
           <GlassField
             label="The output you got back"
@@ -117,11 +117,23 @@ export default function IntakeView(p: Props) {
             onChange={p.setOutput}
             placeholder="Paste the answer the model returned. This is the specimen Rubriq examines."
             mono
-            minHeight={170}
+            minHeight={250}
           />
         </div>
 
-        <div className="mt-3.5 grid gap-3.5 sm:grid-cols-2">
+        {/* judge sits between the specimens and the model picker */}
+        <div className="mt-4">
+          <JudgePanel
+            enabled={p.judgeEnabled}
+            apiKey={p.judgeKey}
+            model={p.judgeModel}
+            onToggle={p.setJudgeEnabled}
+            onKey={p.setJudgeKey}
+            onModel={p.setJudgeModel}
+          />
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <Dropdown label="Provider" value={p.provider} placeholder="Any provider" options={PROVIDER_NAMES} onChange={p.setProvider} />
           <Dropdown
             label="Model"
@@ -133,19 +145,8 @@ export default function IntakeView(p: Props) {
             disabledHint="Choose a provider first"
           />
         </div>
-        <div className="mt-3.5">
+        <div className="mt-4">
           <ToneSelector value={p.tone} onChange={p.setTone} />
-        </div>
-
-        <div className="mt-3.5">
-          <JudgePanel
-            enabled={p.judgeEnabled}
-            apiKey={p.judgeKey}
-            model={p.judgeModel}
-            onToggle={p.setJudgeEnabled}
-            onKey={p.setJudgeKey}
-            onModel={p.setJudgeModel}
-          />
         </div>
 
         {p.error && (

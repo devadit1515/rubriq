@@ -3,14 +3,13 @@
 @tailwind utilities;
 
 /* ————————————————————————————————————————————————————————————
-   Fonts — self-hosted, variable, latin. Display = Geist (editorial
-   grotesk). Data/evidence/repair = JetBrains Mono. Enormous scale
-   contrast between them is the type system.
+   Fonts — self-hosted, variable, latin. UI/display = Hanken Grotesk
+   (clean, highly readable). Data/evidence/repair = JetBrains Mono.
    ———————————————————————————————————————————————————————————— */
 @font-face {
-  font-family: "Bricolage Grotesque";
-  src: url("/fonts/bricolage-var-latin.woff2") format("woff2");
-  font-weight: 200 800;
+  font-family: "Hanken Grotesk";
+  src: url("/fonts/hanken-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -41,7 +40,7 @@
   --ink: oklch(0.83 0.16 160);
   --ink-soft: oklch(0.72 0.12 162);
   --ink-deep: oklch(0.5 0.11 164);
-  --ink-glow: oklch(0.83 0.16 160 / 0.5);
+  --ink-glow: oklch(0.83 0.16 160 / 0.28); /* dialed down — minimalist */
 
   --platinum: oklch(0.83 0.012 250);
 
@@ -84,14 +83,13 @@ body {
   margin: 0;
   min-height: 100dvh;
   color: var(--text);
-  font-family: "Bricolage Grotesque", system-ui, sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* near-flat obsidian — the big green glow is gone; only a faint top lift remains */
   background:
-    radial-gradient(120% 90% at 50% -10%, oklch(0.17 0.02 176 / 0.5), transparent 55%),
-    radial-gradient(80% 60% at 82% 8%, oklch(0.16 0.02 262 / 0.6), transparent 60%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 62%, var(--bg) 100%);
+    radial-gradient(80% 60% at 50% -25%, oklch(0.135 0.01 210 / 0.35), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 72%, var(--bg) 100%);
   background-attachment: fixed;
   overflow-x: hidden;
 }

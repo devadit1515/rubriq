@@ -74,7 +74,7 @@ export default function VerdictView({ report, output, source, onReset }: Props) 
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, filter: "blur(8px)" }}
       transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-      className="relative mx-auto w-full max-w-[1160px] px-5 pb-32 pt-4 sm:px-8"
+      className="relative mx-auto w-full max-w-[1280px] px-5 pb-32 pt-4 sm:px-8"
     >
       {/* reading progress */}
       <motion.div
@@ -110,6 +110,31 @@ export default function VerdictView({ report, output, source, onReset }: Props) 
           <TaskBadge task={report.task} />
         </div>
       </motion.div>
+
+      {/* CORRECTNESS CAVEAT — a confident wrong answer can still score well in
+          local mode, because facts are not checked. Say so, loudly. */}
+      {report.parameters.some((prm) => prm.requires_judge) && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...SOFT, delay: 0.4 }}
+          className="glass mx-auto mt-8 flex max-w-[760px] items-start gap-3 p-4 sm:p-5"
+          style={{ boxShadow: "0 0 0 1px oklch(from var(--mixed) l c h / 0.4) inset, var(--shadow-glass)" }}
+          role="note"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden className="mt-0.5 flex-none">
+            <path d="M12 3 2 20h20L12 3Z" stroke="var(--mixed)" strokeWidth="1.6" strokeLinejoin="round" />
+            <path d="M12 10v4.5" stroke="var(--mixed)" strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="12" cy="17.5" r="0.4" fill="var(--mixed)" stroke="var(--mixed)" strokeWidth="0.9" />
+          </svg>
+          <p className="text-[0.9rem] leading-relaxed" style={{ color: "var(--text-dim)" }}>
+            <span style={{ color: "var(--mixed)", fontWeight: 600 }}>Correctness was not checked.</span> Local
+            mode scores the writing — structure, relevance, readability — not whether the answer is{" "}
+            <em>true</em>. A confident wrong answer (say, “2+2=5”) can still score well here. Turn on the{" "}
+            <span style={{ color: "var(--ink)" }}>Gemini judge</span> to verify the facts.
+          </p>
+        </motion.div>
+      )}
 
       {/* SPECIMEN — receipts */}
       <div className="mx-auto mt-16 max-w-[880px]">

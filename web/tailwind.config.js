@@ -21,8 +21,8 @@ export default {
         weak: "var(--weak)",
       },
       fontFamily: {
-        display: ["'Bricolage Grotesque'", "system-ui", "sans-serif"],
-        sans: ["'Bricolage Grotesque'", "system-ui", "sans-serif"],
+        display: ["'Hanken Grotesk'", "system-ui", "sans-serif"],
+        sans: ["'Hanken Grotesk'", "system-ui", "sans-serif"],
         mono: ["'JetBrains Mono'", "ui-monospace", "monospace"],
       },
       letterSpacing: {
