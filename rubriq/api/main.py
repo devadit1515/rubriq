@@ -62,13 +62,14 @@ def warmup() -> dict:
     return models.availability()
 
 
-# Serve the frontend when a web/ directory is present (local dev and the
-# single-container HF Spaces deploy). Mounted last so API routes win.
-# RUBRIQ_WEB_DIR overrides; otherwise try repo layout, then CWD (Docker).
+# Serve the built frontend when web/dist is present (a single-container deploy or
+# a local `npm run build`). The primary frontend now lives on Vercel and reaches
+# this engine via rewrites, so in the API-only deploy dist is simply absent and no
+# static mount is added. Mounted last so API routes win. RUBRIQ_WEB_DIR overrides.
 _candidates = [
     Path(os.environ["RUBRIQ_WEB_DIR"]) if os.environ.get("RUBRIQ_WEB_DIR") else None,
-    Path(__file__).resolve().parents[2] / "web",
-    Path.cwd() / "web",
+    Path(__file__).resolve().parents[2] / "web" / "dist",
+    Path.cwd() / "web" / "dist",
 ]
 for _web_dir in filter(None, _candidates):
     if _web_dir.is_dir():

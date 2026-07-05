@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ————————————————————————————————————————————————————————————
+   Fonts — self-hosted, variable, latin. Display = Geist (editorial
+   grotesk). Data/evidence/repair = JetBrains Mono. Enormous scale
+   contrast between them is the type system.
+   ———————————————————————————————————————————————————————————— */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/fonts/bricolage-var-latin.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jbmono-var-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ————————————————————————————————————————————————————————————
+   Obsidian & Ink — tokens. One dark field, one green light source,
+   platinum chrome, three desaturated verdict inks used ONLY on scores.
+   ———————————————————————————————————————————————————————————— */
+:root {
+  --bg: oklch(0.1 0.012 264);
+  --bg-deep: oklch(0.075 0.01 264);
+  --bg-2: oklch(0.145 0.014 262);
+
+  /* frosted instrument glass */
+  --glass: oklch(0.235 0.014 260 / 0.5);
+  --glass-2: oklch(0.28 0.016 258 / 0.55);
+  --glass-edge: oklch(0.98 0.01 250 / 0.14); /* top light-catching edge */
+  --glass-inner: oklch(0.8 0.03 200 / 0.05); /* inner highlight */
+
+  /* the luminous evaluation-green ink — the light source */
+  --ink: oklch(0.83 0.16 160);
+  --ink-soft: oklch(0.72 0.12 162);
+  --ink-deep: oklch(0.5 0.11 164);
+  --ink-glow: oklch(0.83 0.16 160 / 0.5);
+
+  --platinum: oklch(0.83 0.012 250);
+
+  /* text ramp — bright enough for AA at every size on the obsidian field */
+  --text: oklch(0.95 0.006 250);
+  --text-dim: oklch(0.78 0.008 250);
+  --text-mut: oklch(0.63 0.01 252);
+
+  --line: oklch(0.85 0.02 250 / 0.1);
+  --line-2: oklch(0.85 0.02 250 / 0.16);
+
+  /* verdict inks (desaturated, sophisticated — never candy) */
+  --strong: oklch(0.8 0.15 160);
+  --mixed: oklch(0.82 0.11 82);
+  --weak: oklch(0.68 0.16 26);
+
+  --r-xl: 26px;
+  --r-lg: 20px;
+  --r-md: 13px;
+  --r-sm: 9px;
+
+  --shadow-glass: 0 1px 0 0 var(--glass-edge) inset, 0 0 0 1px var(--line) inset,
+    0 26px 60px -28px oklch(0 0 0 / 0.75), 0 4px 16px -8px oklch(0 0 0 / 0.5);
+  --shadow-lift: 0 1px 0 0 var(--glass-edge) inset, 0 0 0 1px var(--line-2) inset,
+    0 40px 90px -30px oklch(0 0 0 / 0.85), 0 10px 30px -12px oklch(0 0 0 / 0.6);
+
+  --measure: 68ch;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--line-2) transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--text);
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background:
+    radial-gradient(120% 90% at 50% -10%, oklch(0.17 0.02 176 / 0.5), transparent 55%),
+    radial-gradient(80% 60% at 82% 8%, oklch(0.16 0.02 262 / 0.6), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 62%, var(--bg) 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Film grain — a fixed, cheap, GPU-light overlay that kills gradient banding. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--ink-glow);
+  color: oklch(0.16 0.02 260);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* thin, quiet scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.85 0.02 250 / 0.28);
+  background-clip: content-box;
+}
+
+@layer components {
+  /* The one material. ~4–6mm of frosted instrument glass: blur, a light-
+     catching top edge, an inner highlight, ambient occlusion beneath. */
+  .glass {
+    background: linear-gradient(180deg, var(--glass-2), var(--glass));
+    -webkit-backdrop-filter: blur(20px) saturate(1.25);
+    backdrop-filter: blur(20px) saturate(1.25);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-glass);
+    position: relative;
+  }
+  /* the inner highlight rim, kept off the blur layer so it stays crisp */
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, var(--glass-edge), transparent 30%, transparent 75%, oklch(0 0 0 / 0.25));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* etched instrument label — mono, small-caps energy, wide tracking. Whispers. */
+  .etch {
+    font-family: "JetBrains Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.66rem;
+    font-weight: 500;
+    color: var(--text-mut);
+  }
+
+  .prose-measure {
+    max-width: var(--measure);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  /* faint green key-light bloom placed behind the instrument */
+  .bloom {
+    background: radial-gradient(closest-side, var(--ink-glow), transparent 70%);
+    filter: blur(6px);
+  }
+}
+
+/* Motion honesty. Reveal defaults keep content visible; here we only calm the
+   ambient loops. Framer respects MotionConfig reducedMotion="user" for the rest. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

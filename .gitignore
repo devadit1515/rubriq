@@ -27,9 +27,12 @@ models/
 Thumbs.db
 .DS_Store
 
-# Node (Step 2 frontend, pre-emptive)
+# Node / Vite frontend
 node_modules/
 .next/
+web/dist/
+*.tsbuildinfo
+.vite/
 
 # Vercel local artifacts
 web/.vercel/

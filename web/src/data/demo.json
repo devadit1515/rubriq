@@ -1,0 +1,725 @@
+[
+  {
+    "label": "Sabotaged summary",
+    "hint": "invented facts + blown word limit",
+    "provider": "OpenAI",
+    "model": "GPT-5.5",
+    "prompt": "Summarize the following text in at most 60 words.\n\nThe Larsen Glacier expedition of 1987 was led by Norwegian climatologist\nDr. Ingrid Solheim. Over four months, the twelve-person team drilled ice\ncores to a depth of 800 meters, recovering samples dating back roughly\n12,000 years. The expedition's findings, published in 1989, showed that\nregional temperatures had risen 1.4 degrees Celsius over the preceding\ncentury. Funding came primarily from the Norwegian Polar Institute, with\nadditional support from the University of Bergen. Two team members were\nevacuated in the third month after a crevasse accident, but there were no\nfatalities. The ice core archive remains in Tromso and is still used by\nresearchers today.",
+    "output": "The famous 1987 Larsen Glacier expedition, led by the celebrated Dr. Ingrid Solheim, made groundbreaking discoveries that changed climate science forever. The team of fifteen brave scientists drilled to an unprecedented 1,200 meters, and tragically three researchers lost their lives in an avalanche. Their findings proved that global temperatures rose 3 degrees. It is important to note that this expedition remains a testament to human perseverance and stands as a pivotal moment in the history of polar research, inspiring generations of scientists around the world to pursue climate research.",
+    "report": {
+      "task": {
+        "task_type": "summarization",
+        "confidence": 0.7999999999999999,
+        "signals": [
+          "prompt asks to summarize",
+          "prompt contains pasted source text"
+        ],
+        "has_source_text": true,
+        "instruction": "Summarize the following text in at most 60 words.",
+        "source_text": "The Larsen Glacier expedition of 1987 was led by Norwegian climatologist\nDr. Ingrid Solheim. Over four months, the twelve-person team drilled ice\ncores to a depth of 800 meters, recovering samples dating back roughly\n12,000 years. The expedition's findings, published in 1989, showed that\nregional temperatures had risen 1.4 degrees Celsius over the preceding\ncentury. Funding came primarily from the Norwegian Polar Institute, with\nadditional support from the University of Bergen. Two team members were\nevacuated in the third month after a crevasse accident, but there were no\nfatalities. The ice core archive remains in Tromso and is still used by\nresearchers today."
+      },
+      "parameters": [
+        {
+          "parameter": "faithfulness",
+          "display_name": "Faithfulness to source",
+          "score": 0.0,
+          "verdict": "0/4 claims supported by the source; 4 unsupported, 2 possibly contradicted.",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "unfaithful_content",
+              "detail": "This claim has no support in the source (entailment 0.00).",
+              "evidence": [
+                {
+                  "quote": "The famous 1987 Larsen Glacier expedition, led by the celebrated Dr. Ingrid Solheim, made groundbreaking discoveries that changed climate science forever.",
+                  "source": "output",
+                  "note": ""
+                },
+                {
+                  "quote": "Two team members were evacuated in the third month after a crevasse accident, but there were no fatalities. The ice core archive remains in Tromso and is still…",
+                  "source": "prompt",
+                  "note": "closest source passage"
+                }
+              ],
+              "data": {
+                "entailment": 0.0
+              }
+            },
+            {
+              "failure_mode": "unfaithful_content",
+              "detail": "This claim has no support in the source (entailment 0.00).",
+              "evidence": [
+                {
+                  "quote": "The team of fifteen brave scientists drilled to an unprecedented 1,200 meters, and tragically three researchers lost their lives in an avalanche.",
+                  "source": "output",
+                  "note": ""
+                },
+                {
+                  "quote": "Two team members were evacuated in the third month after a crevasse accident, but there were no fatalities. The ice core archive remains in Tromso and is still…",
+                  "source": "prompt",
+                  "note": "closest source passage"
+                }
+              ],
+              "data": {
+                "entailment": 0.0
+              }
+            },
+            {
+              "failure_mode": "unfaithful_content",
+              "detail": "This claim has no support in the source (entailment 0.00).",
+              "evidence": [
+                {
+                  "quote": "It is important to note that this expedition remains a testament to human perseverance and stands as a pivotal moment in the history of polar research,…",
+                  "source": "output",
+                  "note": ""
+                },
+                {
+                  "quote": "Two team members were evacuated in the third month after a crevasse accident, but there were no fatalities. The ice core archive remains in Tromso and is still…",
+                  "source": "prompt",
+                  "note": "closest source passage"
+                }
+              ],
+              "data": {
+                "entailment": 0.0
+              }
+            },
+            {
+              "failure_mode": "unfaithful_content",
+              "detail": "This claim has no support in the source (entailment 0.00).",
+              "evidence": [
+                {
+                  "quote": "Their findings proved that global temperatures rose 3 degrees.",
+                  "source": "output",
+                  "note": ""
+                },
+                {
+                  "quote": "The Larsen Glacier expedition of 1987 was led by Norwegian climatologist Dr. Ingrid Solheim. Over four months, the twelve-person team drilled ice cores to a…",
+                  "source": "prompt",
+                  "note": "closest source passage"
+                }
+              ],
+              "data": {
+                "entailment": 0.001
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "SummaC (Laban et al. 2022) / RAGAS (Es et al. 2024)"
+        },
+        {
+          "parameter": "answer_relevance",
+          "display_name": "Relevance to the request",
+          "score": 25.8,
+          "verdict": "Semantic similarity between request and output: 0.47.",
+          "strengths": [
+            "Output stays on the topic of the request."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "RAGAS answer relevancy (Es et al. 2024) / TruLens RAG triad"
+        },
+        {
+          "parameter": "instruction_following",
+          "display_name": "Instruction following",
+          "score": 0.0,
+          "verdict": "Met 0 of 1 verifiable constraints extracted from the prompt.",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "missed_constraint",
+              "detail": "Prompt asked for at most 60 words — output has 90 words (asked: at most 60 words).",
+              "evidence": [
+                {
+                  "quote": "at most 60 words",
+                  "source": "prompt",
+                  "note": "the instruction that set this constraint"
+                }
+              ],
+              "data": {
+                "kind": "max_word",
+                "n": 60,
+                "bound": "max",
+                "unit": "word",
+                "actual": "90 words (asked: at most 60 words)"
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "IFEval (Zhou et al. 2023)"
+        },
+        {
+          "parameter": "conciseness",
+          "display_name": "Conciseness",
+          "score": 67.0,
+          "verdict": "90 words with padding present.",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "verbosity",
+              "detail": "Filler phrasing adds words without content: 'it is important to note that'.",
+              "evidence": [
+                {
+                  "quote": "it is important to note that",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {}
+            },
+            {
+              "failure_mode": "verbosity",
+              "detail": "Output is 90 words against an expected ~60 (1.5x).",
+              "evidence": [],
+              "data": {
+                "ratio": 1.5
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "MT-Bench verbosity-bias finding (Zheng et al. 2023), inverted"
+        },
+        {
+          "parameter": "coherence",
+          "display_name": "Coherence (proxy)",
+          "score": 100.0,
+          "verdict": "Flow between sections reads consistent.",
+          "strengths": [
+            "No abrupt jumps or repeated sections detected."
+          ],
+          "findings": [],
+          "is_proxy": true,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Coh-Metrix tradition (Graesser et al. 2004), embedding adaptation"
+        },
+        {
+          "parameter": "readability",
+          "display_name": "Readability vs. audience",
+          "score": 94.0,
+          "verdict": "Grade level 14.5 (Flesch ease 29.6); target band 6-14 for unspecified audience (default band).",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "wrong_register",
+              "detail": "Reads at US grade level 14.5, outside the 6-14 band for unspecified audience (default band) — harder than the audience needs.",
+              "evidence": [],
+              "data": {
+                "fk_grade": 14.5,
+                "band": [
+                  6.0,
+                  14.0
+                ],
+                "audience": "unspecified audience (default band)"
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Flesch (1948) / Kincaid et al. (1975)"
+        }
+      ],
+      "overall": {
+        "score": 33.0,
+        "note": "Weighted over 6 locally scoreable parameters."
+      },
+      "improvement_prompts": [
+        {
+          "failure_mode": "unfaithful_content",
+          "title": "The repaired prompt",
+          "diagnosis": "4 problem(s) diagnosed: content the source does not support (e.g. \"The famous 1987 Larsen Glacier expedition, led by the celebrated Dr. Ingrid Solheim, made groundbreaking discoveries that changed climate science forever.\"); 1 verifiable constraint(s) missed; padding (e.g. \"it is important to note that\"); reading level 14.5 outside the 6-14 band for a general reader. This single prompt rebuilds your original instruction to fix all of them, using GPT mechanisms — Newer GPT models follow instructions literally — state every requirement explicitly, separated by ### delimiters.",
+          "prompt_text": "You are writing for a general reader. Use short sentences, everyday words, one idea at a time.\n\n\"\"\"\n<paste your source text here>\n\"\"\"\n\nSummarize the following text in at most 60 words.\n\nAnswer using only the provided source text. Quote the source where possible.\n\n### Requirements\n1. Use ONLY information stated in the source text. If the source does not say it, do not write it.\n2. If something the task needs is missing from the source, write \"the source does not specify\" rather than filling the gap.\n3. At most 60 words. Count and check this before giving your final answer.\n4. Open with the answer itself — no preamble, no restating the question. Banned filler: \"it is important to note that\".\n\nA previous attempt had these problems — do not repeat any of them:\n- invented content: \"The famous 1987 Larsen Glacier expedition, led by the celebrated Dr. Ingrid Solheim, made groundbreaking discoveries that changed climate science forever.\"\n- invented content: \"The team of fifteen brave scientists drilled to an unprecedented 1,200 meters, and tragically three researchers lost their lives in an avalanche.\"\n- invented content: \"It is important to note that this expedition remains a testament to human perseverance and stands as a pivotal moment in the history of polar research,…\"\n- Prompt asked for at most 60 words — output has 90 words (asked: at most 60 words).\n- filler: \"it is important to note that\"\n\nIMPORTANT — before finishing, verify: at most 60 words; every claim traces to a sentence in the source text; the response starts with substance and contains no filler.",
+          "model_family": "gpt",
+          "technique_source": "OpenAI prompt engineering guide (RESEARCH.md 2.2); role prompting for register (RESEARCH.md 2.8)"
+        }
+      ],
+      "honesty_notes": [
+        "Parameters marked 'proxy' measure statistical stand-ins (diversity, rhythm, flow), not the subjective quality itself."
+      ],
+      "engine": "local"
+    }
+  },
+  {
+    "label": "Faithful summary",
+    "hint": "the same task, done right",
+    "provider": "Anthropic",
+    "model": "Claude Sonnet 5",
+    "prompt": "Summarize the following text in at most 60 words.\n\nThe Larsen Glacier expedition of 1987 was led by Norwegian climatologist\nDr. Ingrid Solheim. Over four months, the twelve-person team drilled ice\ncores to a depth of 800 meters, recovering samples dating back roughly\n12,000 years. The expedition's findings, published in 1989, showed that\nregional temperatures had risen 1.4 degrees Celsius over the preceding\ncentury. Funding came primarily from the Norwegian Polar Institute, with\nadditional support from the University of Bergen. Two team members were\nevacuated in the third month after a crevasse accident, but there were no\nfatalities. The ice core archive remains in Tromso and is still used by\nresearchers today.",
+    "output": "In 1987, Dr. Ingrid Solheim led a twelve-person Norwegian expedition that drilled 800-meter ice cores on the Larsen Glacier, capturing 12,000 years of climate data. Published in 1989, the findings showed regional warming of 1.4 degrees Celsius over a century. Despite a crevasse accident, no one died.",
+    "report": {
+      "task": {
+        "task_type": "summarization",
+        "confidence": 0.7999999999999999,
+        "signals": [
+          "prompt asks to summarize",
+          "prompt contains pasted source text"
+        ],
+        "has_source_text": true,
+        "instruction": "Summarize the following text in at most 60 words.",
+        "source_text": "The Larsen Glacier expedition of 1987 was led by Norwegian climatologist\nDr. Ingrid Solheim. Over four months, the twelve-person team drilled ice\ncores to a depth of 800 meters, recovering samples dating back roughly\n12,000 years. The expedition's findings, published in 1989, showed that\nregional temperatures had risen 1.4 degrees Celsius over the preceding\ncentury. Funding came primarily from the Norwegian Polar Institute, with\nadditional support from the University of Bergen. Two team members were\nevacuated in the third month after a crevasse accident, but there were no\nfatalities. The ice core archive remains in Tromso and is still used by\nresearchers today."
+      },
+      "parameters": [
+        {
+          "parameter": "faithfulness",
+          "display_name": "Faithfulness to source",
+          "score": 56.4,
+          "verdict": "2/3 claims supported by the source; 1 unsupported.",
+          "strengths": [
+            "2 of 3 output claims are entailed by the source."
+          ],
+          "findings": [
+            {
+              "failure_mode": "unfaithful_content",
+              "detail": "This claim has no support in the source (entailment 0.00).",
+              "evidence": [
+                {
+                  "quote": "Published in 1989, the findings showed regional warming of 1.4 degrees Celsius over a century.",
+                  "source": "output",
+                  "note": ""
+                },
+                {
+                  "quote": "Two team members were evacuated in the third month after a crevasse accident, but there were no fatalities. The ice core archive remains in Tromso and is still…",
+                  "source": "prompt",
+                  "note": "closest source passage"
+                }
+              ],
+              "data": {
+                "entailment": 0.001
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "SummaC (Laban et al. 2022) / RAGAS (Es et al. 2024)"
+        },
+        {
+          "parameter": "answer_relevance",
+          "display_name": "Relevance to the request",
+          "score": 27.3,
+          "verdict": "Semantic similarity between request and output: 0.47.",
+          "strengths": [
+            "Output stays on the topic of the request."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "RAGAS answer relevancy (Es et al. 2024) / TruLens RAG triad"
+        },
+        {
+          "parameter": "instruction_following",
+          "display_name": "Instruction following",
+          "score": 100.0,
+          "verdict": "All 1 verifiable constraints met.",
+          "strengths": [
+            "Met: at most 60 words (49 words (asked: at most 60 words))"
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "IFEval (Zhou et al. 2023)"
+        },
+        {
+          "parameter": "conciseness",
+          "display_name": "Conciseness",
+          "score": 100.0,
+          "verdict": "49 words, no filler detected.",
+          "strengths": [
+            "No filler phrases; length fits the ask."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "MT-Bench verbosity-bias finding (Zheng et al. 2023), inverted"
+        },
+        {
+          "parameter": "coherence",
+          "display_name": "Coherence (proxy)",
+          "score": 100.0,
+          "verdict": "Flow between sections reads consistent.",
+          "strengths": [
+            "No abrupt jumps or repeated sections detected."
+          ],
+          "findings": [],
+          "is_proxy": true,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Coh-Metrix tradition (Graesser et al. 2004), embedding adaptation"
+        },
+        {
+          "parameter": "readability",
+          "display_name": "Readability vs. audience",
+          "score": 100.0,
+          "verdict": "Grade level 11.4 (Flesch ease 38.8); target band 6-14 for unspecified audience (default band).",
+          "strengths": [
+            "Reading level fits unspecified audience (default band)."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Flesch (1948) / Kincaid et al. (1975)"
+        }
+      ],
+      "overall": {
+        "score": 73.7,
+        "note": "Weighted over 6 locally scoreable parameters."
+      },
+      "improvement_prompts": [
+        {
+          "failure_mode": "unfaithful_content",
+          "title": "The repaired prompt",
+          "diagnosis": "1 problem(s) diagnosed: content the source does not support (e.g. \"Published in 1989, the findings showed regional warming of 1.4 degrees Celsius over a century.\"). This single prompt rebuilds your original instruction to fix all of them, using Claude mechanisms — Claude responds well to XML-tagged sections and an assigned role.",
+          "prompt_text": "<source>\n<paste your source text here>\n</source>\n\nSummarize the following text in at most 60 words.\n\nFirst, copy the exact sentences from the source that support your answer into <quotes> tags. Then write the final answer in <answer> tags using only what you quoted.\n\n<rules>\n- Use ONLY information stated in the source text. If the source does not say it, do not write it.\n- If something the task needs is missing from the source, write \"the source does not specify\" rather than filling the gap.\n</rules>\n\nA previous attempt had these problems — do not repeat any of them:\n- invented content: \"Published in 1989, the findings showed regional warming of 1.4 degrees Celsius over a century.\"",
+          "model_family": "claude",
+          "technique_source": "Anthropic prompt engineering docs (RESEARCH.md 2.1)"
+        }
+      ],
+      "honesty_notes": [
+        "Parameters marked 'proxy' measure statistical stand-ins (diversity, rhythm, flow), not the subjective quality itself."
+      ],
+      "engine": "local"
+    }
+  },
+  {
+    "label": "Broken code",
+    "hint": "syntax error + wrong function name",
+    "provider": "Meta",
+    "model": "Llama 4 Maverick",
+    "prompt": "Write a Python function called parse_log_line that takes a log line like '2024-01-03 ERROR disk full' and returns a dict with keys date, level, and message.",
+    "output": "```python\ndef parse_line(line):\n    # TODO: implement parsing logic\n    parts = line.split(\" \"\n    return {\"date\": parts[0]}\n```",
+    "report": {
+      "task": {
+        "task_type": "code_generation",
+        "confidence": 0.8999999999999999,
+        "signals": [
+          "prompt asks for code",
+          "output is mostly code blocks"
+        ],
+        "has_source_text": false,
+        "instruction": "Write a Python function called parse_log_line that takes a log line like '2024-01-03 ERROR disk full' and returns a dict with keys date, level, and message.",
+        "source_text": null
+      },
+      "parameters": [
+        {
+          "parameter": "code_validity",
+          "display_name": "Code validity (static)",
+          "score": 25.0,
+          "verdict": "Static analysis found problems (code was not executed).",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "invalid_code",
+              "detail": "python block does not parse: line 3: '(' was never closed.",
+              "evidence": [
+                {
+                  "quote": "def parse_line(line): # TODO: implement parsing logic parts = line.split(\" \" return {\"date\": parts[0]}",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {}
+            },
+            {
+              "failure_mode": "invalid_code",
+              "detail": "The prompt asks for \"parse_log_line\" but it never appears in the code.",
+              "evidence": [],
+              "data": {
+                "missing_name": "parse_log_line"
+              }
+            },
+            {
+              "failure_mode": "invalid_code",
+              "detail": "Placeholder stubs left in the code: # TODO",
+              "evidence": [
+                {
+                  "quote": "# TODO",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {}
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "static ladder; execution reserved per HumanEval (Chen et al. 2021)"
+        },
+        {
+          "parameter": "instruction_following",
+          "display_name": "Instruction following",
+          "score": null,
+          "verdict": "No verifiable constraints (length, format, required content) detected in the prompt.",
+          "strengths": [],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "nothing checkable was asked",
+          "rubric_source": "IFEval (Zhou et al. 2023)"
+        },
+        {
+          "parameter": "answer_relevance",
+          "display_name": "Relevance to the request",
+          "score": 90.0,
+          "verdict": "Semantic similarity between request and output: 0.76.",
+          "strengths": [
+            "Output stays on the topic of the request."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "RAGAS answer relevancy (Es et al. 2024) / TruLens RAG triad"
+        },
+        {
+          "parameter": "conciseness",
+          "display_name": "Conciseness",
+          "score": 100.0,
+          "verdict": "16 words, no filler detected.",
+          "strengths": [
+            "No filler phrases; length fits the ask."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "MT-Bench verbosity-bias finding (Zheng et al. 2023), inverted"
+        }
+      ],
+      "overall": {
+        "score": 47.8,
+        "note": "Weighted over 3 locally scoreable parameters; not included: Instruction following."
+      },
+      "improvement_prompts": [
+        {
+          "failure_mode": "invalid_code",
+          "title": "The repaired prompt",
+          "diagnosis": "1 problem(s) diagnosed: concrete code defects (python block does not parse: line 3: '(' was never closed; The prompt asks for \"parse_log_line\" but it never appears in the code). This single prompt rebuilds your original instruction to fix all of them, using open-weights model mechanisms — Smaller instruction-following headroom: keep the prompt short, one requirement per line, no nested asks.",
+          "prompt_text": "Write a Python function called parse_log_line that takes a log line like '2024-01-03 ERROR disk full' and returns a dict with keys date, level, and message.\n\nRules:\n- Return complete, runnable code — no TODOs, placeholders, or elided sections.\n- After the code, list 2-3 quick test cases I can run to verify it.\n\nA previous attempt had these problems — do not repeat any of them:\n- python block does not parse: line 3: '(' was never closed.\n- The prompt asks for \"parse_log_line\" but it never appears in the code.\n- Placeholder stubs left in the code: # TODO\n\nIMPORTANT — before finishing, verify: the code parses, is complete, and includes every requested name.",
+          "model_family": "open_weights",
+          "technique_source": "lost-in-the-middle + instruction-following headroom notes (RESEARCH.md 2.7/Part 4)"
+        }
+      ],
+      "honesty_notes": [
+        "Factual accuracy against world knowledge is not verifiable locally; Rubriq reports fabrication-risk signals instead. LLM-judge mode adds verification.",
+        "Code is analyzed statically, never executed; parsing cleanly does not mean it runs correctly."
+      ],
+      "engine": "local"
+    }
+  },
+  {
+    "label": "Confident nonsense",
+    "hint": "fabricated citations & statistics",
+    "provider": "Google",
+    "model": "Gemini 3.5 Flash",
+    "prompt": "What are the health benefits of intermittent fasting?",
+    "output": "Intermittent fasting has remarkable health benefits. Studies show that it extends lifespan by 23.5% and reduces cancer risk by 41%. According to Dr. James Hoffman of Harvard Medical School, \"fasting is the single most powerful intervention in modern medicine\" (Hoffman et al., 2019). Research published at https://fasting-institute.org/study confirms these findings.",
+    "report": {
+      "task": {
+        "task_type": "qa_open",
+        "confidence": 0.8999999999999999,
+        "signals": [
+          "prompt asks a direct question",
+          "prompt contains interrogative sentences"
+        ],
+        "has_source_text": false,
+        "instruction": "What are the health benefits of intermittent fasting?",
+        "source_text": null
+      },
+      "parameters": [
+        {
+          "parameter": "hallucination_risk",
+          "display_name": "Hallucination risk signals",
+          "score": 30.0,
+          "verdict": "5 unverifiable-claim signals found. These are risk flags, not verdicts of falsehood.",
+          "strengths": [],
+          "findings": [
+            {
+              "failure_mode": "hallucination_risk",
+              "detail": "citation-shaped reference — LLMs fabricate plausible-looking citations; verify each one exists (signal: citation_pattern).",
+              "evidence": [
+                {
+                  "quote": "s the single most powerful intervention in modern medicine\" (Hoffman et al., 2019). Research published at https://fasting-institute.org/study",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {
+                "kind": "citation_pattern"
+              }
+            },
+            {
+              "failure_mode": "hallucination_risk",
+              "detail": "precise statistic with no source in the prompt to check it against (signal: precise_statistic).",
+              "evidence": [
+                {
+                  "quote": "e health benefits. Studies show that it extends lifespan by 23.5% and reduces cancer risk by 41%. According to Dr. James Hoff",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {
+                "kind": "precise_statistic"
+              }
+            },
+            {
+              "failure_mode": "hallucination_risk",
+              "detail": "precise statistic with no source in the prompt to check it against (signal: precise_statistic).",
+              "evidence": [
+                {
+                  "quote": "hat it extends lifespan by 23.5% and reduces cancer risk by 41%. According to Dr. James Hoffman of Harvard Medical School,",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {
+                "kind": "precise_statistic"
+              }
+            },
+            {
+              "failure_mode": "hallucination_risk",
+              "detail": "appeal to unnamed studies/experts — no way to trace the claim (signal: vague_authority).",
+              "evidence": [
+                {
+                  "quote": "Intermittent fasting has remarkable health benefits. Studies show that it extends lifespan by 23.5% and reduces cancer risk b",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {
+                "kind": "vague_authority"
+              }
+            },
+            {
+              "failure_mode": "hallucination_risk",
+              "detail": "URL in output — LLMs generate dead or wrong links; verify before trusting (signal: url).",
+              "evidence": [
+                {
+                  "quote": "ern medicine\" (Hoffman et al., 2019). Research published at https://fasting-institute.org/study confirms these findings.",
+                  "source": "output",
+                  "note": ""
+                }
+              ],
+              "data": {
+                "kind": "url"
+              }
+            }
+          ],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "FActScore precondition (Min et al. 2023); fabricated-citation literature"
+        },
+        {
+          "parameter": "factual_accuracy",
+          "display_name": "Factual accuracy",
+          "score": null,
+          "verdict": "Verifying claims against world knowledge requires a judge model with external knowledge. Local mode reports risk signals instead (see Hallucination risk).",
+          "strengths": [],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": true,
+          "skipped_reason": "requires LLM-judge mode",
+          "rubric_source": "FActScore (Min et al. 2023)"
+        },
+        {
+          "parameter": "answer_relevance",
+          "display_name": "Relevance to the request",
+          "score": 100.0,
+          "verdict": "Semantic similarity between request and output: 0.87.",
+          "strengths": [
+            "Output stays on the topic of the request."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "RAGAS answer relevancy (Es et al. 2024) / TruLens RAG triad"
+        },
+        {
+          "parameter": "question_coverage",
+          "display_name": "Question coverage (proxy)",
+          "score": null,
+          "verdict": "Single-part question; coverage check not applicable.",
+          "strengths": [],
+          "findings": [],
+          "is_proxy": true,
+          "requires_judge": false,
+          "skipped_reason": "not multi-part",
+          "rubric_source": "completeness adaptation of IFEval / RAGAS (topical proxy)"
+        },
+        {
+          "parameter": "instruction_following",
+          "display_name": "Instruction following",
+          "score": null,
+          "verdict": "No verifiable constraints (length, format, required content) detected in the prompt.",
+          "strengths": [],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "nothing checkable was asked",
+          "rubric_source": "IFEval (Zhou et al. 2023)"
+        },
+        {
+          "parameter": "coherence",
+          "display_name": "Coherence (proxy)",
+          "score": 100.0,
+          "verdict": "Flow between sections reads consistent.",
+          "strengths": [
+            "No abrupt jumps or repeated sections detected."
+          ],
+          "findings": [],
+          "is_proxy": true,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Coh-Metrix tradition (Graesser et al. 2004), embedding adaptation"
+        },
+        {
+          "parameter": "readability",
+          "display_name": "Readability vs. audience",
+          "score": 100.0,
+          "verdict": "Grade level 11.5 (Flesch ease 35.1); target band 6-14 for unspecified audience (default band).",
+          "strengths": [
+            "Reading level fits unspecified audience (default band)."
+          ],
+          "findings": [],
+          "is_proxy": false,
+          "requires_judge": false,
+          "skipped_reason": "",
+          "rubric_source": "Flesch (1948) / Kincaid et al. (1975)"
+        }
+      ],
+      "overall": {
+        "score": 75.0,
+        "note": "Weighted over 4 locally scoreable parameters; not included: Factual accuracy, Question coverage (proxy), Instruction following."
+      },
+      "improvement_prompts": [
+        {
+          "failure_mode": "hallucination_risk",
+          "title": "The repaired prompt",
+          "diagnosis": "1 problem(s) diagnosed: unverifiable specifics stated as fact (e.g. \"s the single most powerful intervention in modern medicine\" (Hoffman et al., 2019). Research published at https://fasting-institute.org/study\"). This single prompt rebuilds your original instruction to fix all of them, using Gemini mechanisms — Gemini's guidance: context first, question last, and always include a worked example (few-shot).",
+          "prompt_text": "What are the health benefits of intermittent fasting?\n\nRules:\n- For every statistic or citation, name its real source inline, or state it as an estimate in words (\"roughly\", \"on the order of\"). Never invent citations or URLs.\n- Mark claims you are unsure about explicitly, and end with a one-line note: which claims should I double-check independently?\n\nA previous attempt had these problems — do not repeat any of them:\n- stated as fact but unverifiable: \"s the single most powerful intervention in modern medicine\" (Hoffman et al., 2019). Research published at https://fasting-institute.org/study\"\n- stated as fact but unverifiable: \"e health benefits. Studies show that it extends lifespan by 23.5% and reduces cancer risk by 41%. According to Dr. James Hoff\"\n- stated as fact but unverifiable: \"hat it extends lifespan by 23.5% and reduces cancer risk by 41%. According to Dr. James Hoffman of Harvard Medical School,\"",
+          "model_family": "gemini",
+          "technique_source": "Google Gemini prompting guidance (RESEARCH.md 2.3)"
+        }
+      ],
+      "honesty_notes": [
+        "Factual accuracy against world knowledge is not verifiable locally; Rubriq reports fabrication-risk signals instead. LLM-judge mode adds verification.",
+        "Parameters marked 'proxy' measure statistical stand-ins (diversity, rhythm, flow), not the subjective quality itself."
+      ],
+      "engine": "local"
+    }
+  }
+]

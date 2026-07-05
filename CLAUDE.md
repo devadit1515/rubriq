@@ -76,7 +76,10 @@ model), and the entire improvement-prompt template library.
 | No toxicity metric in v1 | deferred | Lexicon approaches false-positive heavily; a proper local classifier is future work. |
 | Question coverage is a topical proxy | flag a question part only when its topic/keywords are absent from the output | Empirically verified (2026-07-05) that bi-encoder similarity cannot distinguish "mentioned" from "answered" (unanswered part scored 0.65 vs answered 0.59). Labeled is_proxy, limitation documented in a dedicated test; true answerhood is judge-mode work. |
 | Scoring adapter | `Scorer` interface with `LocalScorer` now; `LLMJudgeScorer` later (BYO-key free tier, our-key paid tier) | Required by brief. Interface lands in Step 1. |
-| Frontend | Decided at Step 2 (leaning React/Next.js + Vercel) | Not needed before Checkpoint 2. |
+| Frontend | Vite + React + TypeScript + Tailwind; Framer Motion for animation, Lenis for scroll | Rebuilt ground-up in the 2026-07-05 "Instrument" redesign, replacing the vanilla-JS static UI. Vite keeps the toolchain lean and the bundle small (112KB gzip). |
+| 3D instrument | CSS/SVG precision dial, not React Three Fiber | The brief specced an R3F refractive lens; a CSS/SVG gauge holds 60fps on every device, adds no bundle weight, works offline, and keeps the score and the repair prompt as the only two dominant elements. R3F logged as optional progressive enhancement. |
+| Display typeface | Bricolage Grotesque (variable), paired with JetBrains Mono | Geist was the first pick but now reads as an AI-UI default; Bricolage is a grotesk with more character and dodges that tell. Both self-hosted, no CDN. |
+| Frontend↔engine wiring | The app calls relative paths; Vercel rewrites and the Vite dev proxy forward to the HF Space | Removes CORS and per-environment API-base config. Replaces the old `config.js` origin detection. |
 | Document evaluation | Deferred decision until the text pipeline exists | Include only if nearly free per brief. |
 
 Log every future trade-off decision in this table with reasoning; don't stall
@@ -151,6 +154,26 @@ Work autonomously between checkpoints; stop and wait at each one.
   (frontend). User's HF token was pasted in chat — advise revoke + re-auth
   via `hf auth login` when next needed. Still open: mentor review +
   Supabase (deferred Checkpoint 2 items).
+- 2026-07-05 — **Frontend rebuilt ground-up — "The Instrument" redesign.**
+  The vanilla-JS static UI is gone; `web/` is now a Vite + React + TypeScript +
+  Tailwind app. Framer Motion drives the animation (17 tagged capabilities),
+  Lenis the scroll, a CSS/SVG dial the one instrument. Visual system is
+  "Obsidian & Ink": a single dark field, a green-ink jewel accent, frosted-glass
+  panels, Bricolage Grotesque over JetBrains Mono. Two states morph into each
+  other — the intake (idle dial, two paste fields, sample specimens, one lit
+  Evaluate key) and the verdict (a settling-needle score, a read-and-illuminate
+  specimen that anchors each quoted phrase to its finding, severity-weighted
+  parameter cards, and the self-assembling repair prompt as the climax). The
+  engine and its response contract were not touched: the UI derives the
+  weak/mixed/strong tiers from the numeric score and renders
+  `improvement_prompts[0]` as the single cure. Real `EvalReport` JSON captured
+  from the live engine for all four samples ships as offline fixtures, so the
+  demo is identical when the Space sleeps. Vercel serves the built `dist` and
+  rewrites `/evaluate`, `/health`, `/warmup` to the HF Space, so the app makes
+  same-origin calls and `config.js` is gone. Bundle is 112KB gzip. Verified
+  in-browser at desktop and mobile, plus reduced-motion, the offline fallback,
+  the error path, and copy-to-clipboard. Engine deploy unchanged; a frontend
+  change needs only `npx vercel deploy --prod --yes` from `web/`.
 
 ## Future work log
 

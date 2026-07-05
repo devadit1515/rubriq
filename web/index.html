@@ -1,110 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rubriq — LLM output evaluation, locally</title>
-<meta name="description" content="Paste a prompt and the LLM output you got back. Rubriq scores it against published evaluation research, quotes the evidence, and writes the repair prompt.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232e5c3f'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='bold' fill='white' text-anchor='middle'%3Er%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css">
-<script src="config.js"></script>
-</head>
-<body>
-
-<header class="topbar">
-  <div class="brand">
-    <span class="wordmark">Rubriq</span>
-    <span class="brand-note">output evaluation · runs locally</span>
-  </div>
-  <div class="topbar-right">
-    <span class="engine-pill" id="enginePill" role="status">
-      <span class="engine-dot" aria-hidden="true"></span>
-      <span id="engineLabel">connecting…</span>
-    </span>
-    <a class="top-link" href="https://github.com/devadit1515/rubriq" target="_blank" rel="noopener">GitHub</a>
-  </div>
-</header>
-
-<main class="split">
-  <section class="pane pane-input" aria-label="Evaluation input">
-    <form id="evalForm" autocomplete="off">
-      <div class="field">
-        <label for="promptIn">The prompt you gave</label>
-        <textarea id="promptIn" rows="7" spellcheck="false"
-          placeholder="Paste the exact prompt, including any source text it contained." required></textarea>
-      </div>
-
-      <div class="field">
-        <label for="outputIn">The output you got back</label>
-        <textarea id="outputIn" rows="9" spellcheck="false"
-          placeholder="Paste the model's full response." required></textarea>
-      </div>
-
-      <fieldset class="field field-model">
-        <legend>Which model produced it <span class="opt">optional — tunes the repair prompts</span></legend>
-        <div class="combo-row">
-          <div class="combo" data-combo="provider">
-            <input id="providerIn" role="combobox" aria-expanded="false" aria-autocomplete="list"
-                   aria-controls="providerList" placeholder="Provider" aria-label="Provider">
-            <button type="button" class="combo-toggle" tabindex="-1" aria-hidden="true">▾</button>
-            <ul class="combo-list" id="providerList" role="listbox" hidden></ul>
-          </div>
-          <div class="combo" data-combo="model">
-            <input id="modelIn" role="combobox" aria-expanded="false" aria-autocomplete="list"
-                   aria-controls="modelList" placeholder="Model" aria-label="Model">
-            <button type="button" class="combo-toggle" tabindex="-1" aria-hidden="true">▾</button>
-            <ul class="combo-list" id="modelList" role="listbox" hidden></ul>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="field field-tone">
-        <legend>Expected tone <span class="opt">sets the reading-level check</span></legend>
-        <div class="tone-row" role="radiogroup" aria-label="Expected tone">
-          <label class="tone-chip">
-            <input type="radio" name="tone" value="" data-audience="" checked>
-            <span>Neutral</span>
-          </label>
-          <label class="tone-chip">
-            <input type="radio" name="tone" value="simple, plain language" data-audience="general readers">
-            <span>Simple</span>
-          </label>
-          <label class="tone-chip">
-            <input type="radio" name="tone" value="professional" data-audience="professional">
-            <span>Professional</span>
-          </label>
-          <label class="tone-chip">
-            <input type="radio" name="tone" value="technical" data-audience="expert">
-            <span>Technical</span>
-          </label>
-        </div>
-      </fieldset>
-
-      <div class="actions">
-        <button type="submit" class="btn btn-primary" id="evalBtn">Evaluate output</button>
-        <button type="button" class="btn btn-ghost" id="clearBtn">Clear</button>
-      </div>
-
-      <div class="samples" aria-label="Sample pairs">
-        <span class="samples-label">or try a sample:</span>
-        <div class="samples-row" id="sampleChips"></div>
-      </div>
-    </form>
-  </section>
-
-  <section class="pane pane-report" aria-label="Evaluation report">
-    <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" id="readProgress"></div></div>
-    <div id="reportPane" aria-live="polite">
-      <!-- empty / skeleton / report / error rendered by app.js -->
-    </div>
-  </section>
-</main>
-
-<div class="toast" id="toast" role="status" hidden></div>
-
-<script src="vendor/motion.js"></script>
-<script src="models.js"></script>
-<script src="samples.js"></script>
-<script src="app.js"></script>
-</body>
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#06070A" />
+    <title>Rubriq — a precision instrument for LLM output</title>
+    <meta
+      name="description"
+      content="Rubriq reads an AI output like a jeweller's loupe reads a diamond — scoring it against published evaluation research, showing its receipts, and handing you one paste-ready repair prompt. Runs entirely on your machine."
+    />
+    <link rel="preload" href="/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jbmono-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
