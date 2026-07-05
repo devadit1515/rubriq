@@ -30,3 +30,8 @@ Thumbs.db
 # Node (Step 2 frontend, pre-emptive)
 node_modules/
 .next/
+
+# Vercel local artifacts
+web/.vercel/
+web/.env*
+
