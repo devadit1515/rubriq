@@ -131,8 +131,18 @@ Work autonomously between checkpoints; stop and wait at each one.
   LocalScorer, improvement-prompt generator (failure × task × model family),
   FastAPI app, 44 tests green on curated planted-failure pairs. Demo pair
   verified end-to-end: sabotaged summary scores 33/100 with all four planted
-  fabrications quoted. **Waiting at Checkpoint 2**: user reviews, sets up
-  Supabase, hands over credentials; Step 2 (frontend + deploy) after that.
+  fabrications quoted.
+- 2026-07-05 — **Step 2 (frontend) built on user's direct go-ahead**
+  (Supabase deferred; slot it in when credentials arrive). Impeccable init
+  done: PRODUCT.md + DESIGN.md. web/ is a no-build static SPA (IBM Plex
+  Sans + JetBrains Mono, OKLCH green-ink lab-report system), served by
+  FastAPI locally and battle-tested with Playwright at desktop/mobile.
+  Hosting decision: **frontend → Vercel, engine → HF Spaces Docker**
+  (Render free tier's 512MB can't hold torch + DeBERTa; HF free tier has
+  16GB). Dockerfile + README Space frontmatter + web/vercel.json ready;
+  DEPLOY.md has the runbook. **Blocked on user auth**: user will run
+  `npx vercel login` (own account, not kapilchordia) and create an HF
+  write token, then both deploys are one command each.
 
 ## Future work log
 
