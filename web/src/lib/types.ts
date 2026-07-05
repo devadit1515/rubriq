@@ -25,7 +25,9 @@ export type FailureMode =
   | "format_violation"
   | "low_diversity"
   | "invalid_code"
-  | "invented_fields";
+  | "invented_fields"
+  | "factual_error"
+  | "subjective_weakness";
 
 export type ModelFamily = "claude" | "gpt" | "gemini" | "open_weights" | "generic";
 

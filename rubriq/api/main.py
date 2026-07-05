@@ -10,13 +10,14 @@ import os
 import threading
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from .. import models
 from ..schemas import EvalReport, EvalRequest
 from ..scoring import LocalScorer, Scorer
+from ..scoring.judge import DEFAULT_MODEL, GeminiJudgeScorer
 
 app = FastAPI(
     title="Rubriq",
@@ -36,12 +37,32 @@ _SCORERS: dict[str, Scorer] = {"local": LocalScorer()}
 
 
 @app.post("/evaluate", response_model=EvalReport)
-def evaluate(request: EvalRequest, engine: str = "local") -> EvalReport:
-    scorer = _SCORERS.get(engine)
-    if scorer is None:
-        raise HTTPException(status_code=400, detail=f"unknown engine '{engine}'; available: {list(_SCORERS)}")
+def evaluate(
+    request: EvalRequest,
+    engine: str = "local",
+    x_gemini_key: str | None = Header(default=None),
+    x_gemini_model: str | None = Header(default=None),
+) -> EvalReport:
     if not request.prompt.strip() or not request.output.strip():
         raise HTTPException(status_code=422, detail="both prompt and output are required")
+
+    # Judge tier: bring-your-own-key. The key is per-request, never stored.
+    if engine in ("judge-gemini", "judge"):
+        if not x_gemini_key:
+            raise HTTPException(status_code=400, detail="judge mode requires a Gemini API key (X-Gemini-Key header)")
+        judge = GeminiJudgeScorer(
+            api_key=x_gemini_key,
+            model=x_gemini_model or DEFAULT_MODEL,
+            local=_SCORERS["local"],  # type: ignore[arg-type]
+        )
+        return judge.evaluate(request)
+
+    scorer = _SCORERS.get(engine)
+    if scorer is None:
+        raise HTTPException(
+            status_code=400,
+            detail=f"unknown engine '{engine}'; available: {list(_SCORERS)} + judge-gemini",
+        )
     return scorer.evaluate(request)
 
 

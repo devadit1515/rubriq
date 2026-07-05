@@ -83,6 +83,8 @@ export const FAILURE_LABEL: Record<FailureMode, string> = {
   low_diversity: "Repetitive",
   invalid_code: "Code defect",
   invented_fields: "Invented fields",
+  factual_error: "Factual error",
+  subjective_weakness: "Quality",
 };
 
 export function failureLabel(mode: FailureMode): string {

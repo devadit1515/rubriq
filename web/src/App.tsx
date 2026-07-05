@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
 import { MotionPrefProvider } from "./lib/motionPref";
 import { PointerProvider } from "./lib/pointer";
-import { evaluate, pingHealth, warmup, type EngineState } from "./lib/api";
+import { evaluate, warmup } from "./lib/api";
 import type { DemoSample, EvalReport } from "./lib/types";
 import SceneBackground from "./components/SceneBackground";
 import Header from "./components/Header";
@@ -19,6 +19,31 @@ interface RunArgs {
   tone: string;
 }
 
+interface JudgeState {
+  enabled: boolean;
+  key: string;
+  model: string;
+}
+
+// Judge settings persist in the browser only (the key never touches our servers
+// beyond the per-request header). Falls back to defaults if storage is blocked.
+function loadJudge(): JudgeState {
+  try {
+    const raw = localStorage.getItem("rubriq_judge");
+    if (raw) {
+      const j = JSON.parse(raw);
+      return {
+        enabled: !!j.enabled,
+        key: typeof j.key === "string" ? j.key : "",
+        model: typeof j.model === "string" && j.model ? j.model : "gemini-2.0-flash",
+      };
+    }
+  } catch {
+    /* ignore */
+  }
+  return { enabled: false, key: "", model: "gemini-2.0-flash" };
+}
+
 export default function App() {
   const [prompt, setPrompt] = useState("");
   const [output, setOutput] = useState("");
@@ -26,13 +51,16 @@ export default function App() {
   const [model, setModel] = useState("");
   const [tone, setTone] = useState("");
 
+  const [judgeEnabled, setJudgeEnabled] = useState(() => loadJudge().enabled);
+  const [judgeKey, setJudgeKey] = useState(() => loadJudge().key);
+  const [judgeModel, setJudgeModel] = useState(() => loadJudge().model);
+
   const [phase, setPhase] = useState<Phase>("intake");
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<EvalReport | null>(null);
   const [evaluatedOutput, setEvaluatedOutput] = useState("");
   const [source, setSource] = useState<"live" | "fixture">("live");
-  const [engine, setEngine] = useState<EngineState>("checking");
 
   const inflight = useRef<AbortController | null>(null);
   const lenis = useRef<Lenis | null>(null);
@@ -53,25 +81,19 @@ export default function App() {
     };
   }, []);
 
-  // Engine health — poll, nudge warmup, retry while asleep/waking (capped).
+  // Wake the engine on load so the first evaluation doesn't pay the cold start.
   useEffect(() => {
-    let alive = true;
-    let attempts = 0;
     warmup();
-    const tick = async () => {
-      const h = await pingHealth();
-      if (!alive) return;
-      setEngine(h.state);
-      attempts += 1;
-      if ((h.state === "waking" || h.state === "offline") && attempts < 12) {
-        setTimeout(tick, 6000);
-      }
-    };
-    tick();
-    return () => {
-      alive = false;
-    };
   }, []);
+
+  // Persist judge settings in the browser (key included — it stays client-side).
+  useEffect(() => {
+    try {
+      localStorage.setItem("rubriq_judge", JSON.stringify({ enabled: judgeEnabled, key: judgeKey, model: judgeModel }));
+    } catch {
+      /* private mode — ignore */
+    }
+  }, [judgeEnabled, judgeKey, judgeModel]);
 
   const scrollTop = useCallback((immediate = false) => {
     if (lenis.current) lenis.current.scrollTo(0, { immediate });
@@ -91,8 +113,13 @@ export default function App() {
       const ctrl = new AbortController();
       inflight.current = ctrl;
 
+      const judge =
+        judgeEnabled && judgeKey.trim()
+          ? { key: judgeKey.trim(), model: judgeModel.trim() || undefined }
+          : undefined;
+
       try {
-        const res = await evaluate({ prompt: P, output: O, model_name: M, options: { tone: T } }, ctrl.signal);
+        const res = await evaluate({ prompt: P, output: O, model_name: M, options: { tone: T } }, ctrl.signal, judge);
         if (ctrl.signal.aborted) return;
         setReport(res.report);
         setSource(res.source);
@@ -107,7 +134,7 @@ export default function App() {
         setRunning(false);
       }
     },
-    [prompt, output, model, tone, running, scrollTop],
+    [prompt, output, model, tone, running, scrollTop, judgeEnabled, judgeKey, judgeModel],
   );
 
   const cancel = useCallback(() => {
@@ -122,17 +149,14 @@ export default function App() {
     setModel("");
   }, []);
 
-  const pickSample = useCallback(
-    (s: DemoSample) => {
-      setPrompt(s.prompt);
-      setOutput(s.output);
-      setProvider(s.provider);
-      setModel(s.model);
-      setTone("");
-      runEval({ prompt: s.prompt, output: s.output, model: s.model, tone: "" });
-    },
-    [runEval],
-  );
+  // Load a sample into the fields only; the user presses Evaluate themselves.
+  const pickSample = useCallback((s: DemoSample) => {
+    setPrompt(s.prompt);
+    setOutput(s.output);
+    setProvider(s.provider);
+    setModel(s.model);
+    setTone("");
+  }, []);
 
   const reset = useCallback(() => {
     cancel();
@@ -142,24 +166,12 @@ export default function App() {
     scrollTop(true);
   }, [cancel, scrollTop]);
 
-  // ⌘/Ctrl + Enter evaluates from anywhere in the intake.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && phase === "intake") {
-        e.preventDefault();
-        runEval();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [phase, runEval]);
-
   return (
     <MotionPrefProvider>
       <PointerProvider>
         <SceneBackground />
         <div className="relative z-scene flex min-h-dvh flex-col">
-          <Header engine={engine} />
+          <Header />
           <main className="flex-1">
             <AnimatePresence mode="wait">
               {phase === "intake" ? (
@@ -175,6 +187,12 @@ export default function App() {
                   setProvider={changeProvider}
                   setModel={setModel}
                   setTone={setTone}
+                  judgeEnabled={judgeEnabled}
+                  judgeKey={judgeKey}
+                  judgeModel={judgeModel}
+                  setJudgeEnabled={setJudgeEnabled}
+                  setJudgeKey={setJudgeKey}
+                  setJudgeModel={setJudgeModel}
                   running={running}
                   error={error}
                   onEvaluate={() => runEval()}
@@ -190,7 +208,9 @@ export default function App() {
           </main>
           <footer className="relative z-scene px-5 py-8 text-center sm:px-8">
             <p className="etch" style={{ fontSize: "0.56rem", color: "var(--text-mut)" }}>
-              Rubriq · local, research-grounded evaluation · your text never leaves this device
+              {judgeEnabled && judgeKey.trim()
+                ? "Rubriq · judge mode on — evaluations use your Gemini key and are sent to Google"
+                : "Rubriq · local, research-grounded evaluation · your text never leaves this device"}
             </p>
           </footer>
         </div>

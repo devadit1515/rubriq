@@ -1,12 +1,10 @@
-// Sticky masthead. Wordmark left, instrument controls right. Stays quiet — one
-// thing leads per view, and it is never the header.
+// Sticky masthead. Just the wordmark — quiet by design; one thing leads per view,
+// and it is never the header.
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
-import type { EngineState } from "../lib/api";
-import StatusPill from "./StatusPill";
 import { EASE_OUT_EXPO } from "../lib/motion";
 
-export default function Header({ engine, children }: { engine: EngineState; children?: ReactNode }) {
+export default function Header({ children }: { children?: ReactNode }) {
   return (
     <motion.header
       initial={{ opacity: 0, y: -14 }}
@@ -34,10 +32,7 @@ export default function Header({ engine, children }: { engine: EngineState; chil
             the instrument
           </span>
         </a>
-        <div className="flex items-center gap-2.5">
-          {children}
-          <StatusPill state={engine} />
-        </div>
+        {children && <div className="flex items-center gap-2.5">{children}</div>}
       </div>
     </motion.header>
   );

@@ -56,6 +56,15 @@ export default function ParameterCard({ param, index, keyToAnchor, activeAnchor,
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
             {param.is_proxy && <Badge label="proxy" tone="muted" title="A statistical stand-in, not the subjective quality itself" />}
             {notScored === "judge" && <Badge label="needs judge" tone="muted" title="Cannot be judged locally — requires LLM-judge mode" />}
+            {param.rubric_source.includes("Gemini judge") && (
+              <span
+                title="Scored by the Gemini judge with your key"
+                className="rounded px-1.5 py-0.5 font-mono"
+                style={{ fontSize: "0.56rem", letterSpacing: "0.06em", color: "var(--ink)", background: "oklch(0.85 0.14 160 / 0.12)", textTransform: "uppercase" }}
+              >
+                judge
+              </span>
+            )}
             {!notScored && (
               <span className="etch" style={{ color, letterSpacing: "0.2em", fontSize: "0.58rem" }}>
                 {TIER_WORD[tier]}

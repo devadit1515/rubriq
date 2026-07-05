@@ -39,6 +39,8 @@ class FailureMode(str, Enum):
     LOW_DIVERSITY = "low_diversity"
     INVALID_CODE = "invalid_code"
     INVENTED_FIELDS = "invented_fields"
+    FACTUAL_ERROR = "factual_error"            # judge mode: confirmed wrong vs world knowledge
+    SUBJECTIVE_WEAKNESS = "subjective_weakness"  # judge mode: quality/craft weakness
 
 
 class ModelFamily(str, Enum):

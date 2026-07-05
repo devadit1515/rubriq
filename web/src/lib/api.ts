@@ -12,6 +12,13 @@ export interface EvalResult {
   source: "live" | "fixture";
 }
 
+// Judge tier: the user's own Gemini key, sent per request as a header. Never
+// stored server-side; it lives only in the browser and travels over HTTPS.
+export interface JudgeConfig {
+  key: string;
+  model?: string;
+}
+
 export class EngineOfflineError extends Error {
   constructor(message: string) {
     super(message);
@@ -28,16 +35,43 @@ function withTimeout(signal: AbortSignal | undefined, ms: number): AbortSignal {
   return signal;
 }
 
-export async function evaluate(req: EvalRequest, signal?: AbortSignal): Promise<EvalResult> {
+export async function evaluate(
+  req: EvalRequest,
+  signal?: AbortSignal,
+  judge?: JudgeConfig,
+): Promise<EvalResult> {
   const fixture = fixtureFor(req.prompt, req.output);
+  const useJudge = !!judge?.key;
+  const url = useJudge ? "/evaluate?engine=judge-gemini" : "/evaluate?engine=local";
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (useJudge) {
+    headers["X-Gemini-Key"] = judge!.key;
+    if (judge!.model) headers["X-Gemini-Model"] = judge!.model;
+  }
   try {
-    const res = await fetch("/evaluate?engine=local", {
+    const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(req),
-      signal: withTimeout(signal, 45_000),
+      // judge mode makes a couple of Gemini calls, so allow more time
+      signal: withTimeout(signal, useJudge ? 90_000 : 45_000),
     });
     if (!res.ok) {
+      // Judge route unavailable (e.g. engine not yet updated with judge mode) —
+      // quietly retry local scoring so the evaluation still works.
+      if (useJudge) {
+        try {
+          const localRes = await fetch("/evaluate?engine=local", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(req),
+            signal: withTimeout(signal, 45_000),
+          });
+          if (localRes.ok) return { report: (await localRes.json()) as EvalReport, source: "live" };
+        } catch {
+          /* fall through to fixture / error */
+        }
+      }
       if (fixture) return { report: fixture, source: "fixture" };
       const detail = await res
         .json()

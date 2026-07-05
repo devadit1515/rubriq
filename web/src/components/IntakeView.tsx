@@ -9,6 +9,7 @@ import Dropdown from "./Dropdown";
 import ToneSelector from "./ToneSelector";
 import SampleChips from "./SampleChips";
 import EvaluateButton from "./EvaluateButton";
+import JudgePanel from "./JudgePanel";
 import { EASE_OUT_EXPO, revealChild, revealContainer } from "../lib/motion";
 
 const PROVIDER_NAMES = PROVIDERS.filter((p) => p.models.length > 0).map((p) => p.name);
@@ -24,6 +25,12 @@ interface Props {
   setProvider: (v: string) => void;
   setModel: (v: string) => void;
   setTone: (v: string) => void;
+  judgeEnabled: boolean;
+  judgeKey: string;
+  judgeModel: string;
+  setJudgeEnabled: (v: boolean) => void;
+  setJudgeKey: (v: string) => void;
+  setJudgeModel: (v: string) => void;
   running: boolean;
   error: string | null;
   onEvaluate: () => void;
@@ -34,6 +41,7 @@ interface Props {
 export default function IntakeView(p: Props) {
   const ready = p.prompt.trim().length > 0 && p.output.trim().length > 0;
   const modelOptions = PROVIDERS.find((x) => x.name === p.provider)?.models ?? [];
+  const judgeActive = p.judgeEnabled && p.judgeKey.trim().length > 0;
 
   return (
     <motion.section
@@ -66,14 +74,26 @@ export default function IntakeView(p: Props) {
         <motion.div
           variants={revealChild}
           className="mt-7 inline-flex items-center gap-2.5 rounded-full px-4 py-2"
-          style={{ background: "oklch(0.85 0.14 160 / 0.08)", boxShadow: "0 0 0 1px var(--line) inset" }}
+          style={{
+            background: judgeActive ? "oklch(from var(--mixed) l c h / 0.1)" : "oklch(0.85 0.14 160 / 0.08)",
+            boxShadow: "0 0 0 1px var(--line) inset",
+          }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M12 3l7 3v5c0 4.4-3 8.3-7 9-4-0.7-7-4.6-7-9V6l7-3Z" stroke="var(--ink)" strokeWidth="1.6" strokeLinejoin="round" />
-            <path d="m9 12 2 2 4-4" stroke="var(--ink)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          {judgeActive ? (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <circle cx="12" cy="12" r="9" stroke="var(--mixed)" strokeWidth="1.6" />
+              <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="var(--mixed)" strokeWidth="1.3" />
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M12 3l7 3v5c0 4.4-3 8.3-7 9-4-0.7-7-4.6-7-9V6l7-3Z" stroke="var(--ink)" strokeWidth="1.6" strokeLinejoin="round" />
+              <path d="m9 12 2 2 4-4" stroke="var(--ink)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
           <span className="text-[0.82rem]" style={{ color: "var(--text-dim)" }}>
-            Runs entirely on your machine · nothing leaves this device
+            {judgeActive
+              ? "Judge mode · your prompt & output are sent to Google"
+              : "Runs entirely on your machine · nothing leaves this device"}
           </span>
         </motion.div>
       </motion.div>
@@ -117,6 +137,17 @@ export default function IntakeView(p: Props) {
           <ToneSelector value={p.tone} onChange={p.setTone} />
         </div>
 
+        <div className="mt-3.5">
+          <JudgePanel
+            enabled={p.judgeEnabled}
+            apiKey={p.judgeKey}
+            model={p.judgeModel}
+            onToggle={p.setJudgeEnabled}
+            onKey={p.setJudgeKey}
+            onModel={p.setJudgeModel}
+          />
+        </div>
+
         {p.error && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -138,9 +169,6 @@ export default function IntakeView(p: Props) {
 
         <div className="mx-auto mt-5 max-w-md">
           <EvaluateButton running={p.running} disabled={!ready} onEvaluate={p.onEvaluate} onCancel={p.onCancel} />
-          <p className="mt-3 text-center etch" style={{ fontSize: "0.58rem" }}>
-            {ready ? "press ⌘ / Ctrl + Enter" : "paste a prompt and an output to begin"}
-          </p>
         </div>
       </div>
     </motion.section>
