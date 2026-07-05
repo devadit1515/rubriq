@@ -92,13 +92,17 @@
     </form>
   </section>
 
-  <section class="pane pane-report" id="reportPane" aria-live="polite" aria-label="Evaluation report">
-    <!-- empty / skeleton / report / error rendered by app.js -->
+  <section class="pane pane-report" aria-label="Evaluation report">
+    <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" id="readProgress"></div></div>
+    <div id="reportPane" aria-live="polite">
+      <!-- empty / skeleton / report / error rendered by app.js -->
+    </div>
   </section>
 </main>
 
 <div class="toast" id="toast" role="status" hidden></div>
 
+<script src="vendor/motion.js"></script>
 <script src="models.js"></script>
 <script src="samples.js"></script>
 <script src="app.js"></script>

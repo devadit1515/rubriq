@@ -185,6 +185,8 @@ def _contribute(mode: FailureMode, findings, task, profile: Profile, parts: _Par
         data = findings[0].data
         fk, band = data.get("fk_grade"), data.get("band", [6, 14])
         audience = data.get("audience", "the intended audience")
+        if "unspecified" in audience:
+            audience = "a general reader"
         too_hard = fk is not None and fk > band[1]
         style = ("short sentences, everyday words, one idea at a time" if too_hard
                  else "precise terminology and compact, information-dense prose")

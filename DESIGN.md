@@ -27,6 +27,28 @@ brand; semantic colors appear only on verdicts and states. OKLCH throughout.
 
 Dark mode: none in v1 (projector demo + long-form reading; logged trade-off).
 
+### Instrument console (2026-07-05 redesign)
+
+The input pane is a dark instrument console; the report stays white paper.
+The split IS the brand: you operate the dark machine, it prints a light
+document.
+
+```css
+--console:      oklch(0.180 0.020 150);  /* pane bg                    */
+--console-2:    oklch(0.225 0.022 150);  /* input wells, dropdowns     */
+--console-line: oklch(0.330 0.022 150);
+--console-ink:  oklch(0.935 0.008 140);  /* ~12:1 on console           */
+--console-mut:  oklch(0.720 0.020 145);  /* labels, ~6:1 on console    */
+--led:          oklch(0.760 0.150 148);  /* phosphor green: LED, focus,
+                                            evaluate fill (dark text)  */
+--led-dim:      oklch(0.320 0.060 148);  /* selected wells             */
+```
+
+Console field labels are JetBrains Mono 11px uppercase tracked +0.09em —
+instrument etching. This amends the "mono = verbatim only" rule: mono is
+verbatim material in the REPORT; on the CONSOLE it is the control-label
+voice. Two surfaces, two mono roles, both deliberate.
+
 ## Typography
 
 - **UI + prose**: IBM Plex Sans (variable, self-hosted woff2). Weights
@@ -75,10 +97,21 @@ Dark mode: none in v1 (projector demo + long-form reading; logged trade-off).
 
 ## Motion
 
-150-250ms, `cubic-bezier(0.22, 1, 0.36, 1)` (ease-out-quint family).
-- Report arrival: verdict rows fade/rise 8px, 40ms stagger (state change).
-- Meter fills animate width once on reveal.
-- Copy button flips to "Copied ✓" 1.2s.
-- Skeleton shimmer during evaluation.
-- `prefers-reduced-motion`: all of the above become instant/opacity-only.
-No page-load choreography. Nothing moves that isn't reporting state.
+**Rule: all JS animation runs through the self-hosted Motion library**
+(`web/vendor/motion.js`, v12.42.2, global `Motion`), and the surface must
+use **at least 15 distinct Motion features**, each tagged `M<N>` in app.js
+with the inventory at the top of the file. Current inventory: keyframe
+arrays, springs, stagger, stagger-from-center, timeline sequences,
+raw-value count-up, inView, scroll-linked progress, hover(), press(),
+playback controls (.stop/.finished), independent transform channels,
+custom bezier arrays, SVG dashoffset gauge sweep, exit-before-swap,
+stagger startDelay, blur-as-material.
+
+Energy: demo-theatrical on the report arrival (the set piece: masthead
+rises, gauge sweeps + counts up, verdict rows cascade, meters spring when
+seen, repair card develops into focus). Everything else stays 150-250ms.
+Base ease `cubic-bezier(0.22, 1, 0.36, 1)`.
+
+`prefers-reduced-motion`: the FX flag gates every Motion call; reduced
+users get final states instantly. Content is never hidden pre-animation —
+a script failure leaves a fully readable page.
