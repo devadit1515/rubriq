@@ -70,7 +70,10 @@ model), and the entire improvement-prompt template library.
 | Decision | Choice | Reasoning |
 |---|---|---|
 | Backend language | Python (FastAPI) | sentence-transformers and NLI models are Python-native; the evaluation engine is the product's core, so the backend follows the ML ecosystem. |
-| Local models | sentence-transformers embedding model (MiniLM-class) + DeBERTa NLI model | Small enough to run CPU-only on a laptop demo; both have strong published benchmarks. Exact checkpoints chosen during Step 1 research. |
+| Local models | `BAAI/bge-small-en-v1.5` (embeddings) + `cross-encoder/nli-deberta-v3-small` (NLI) | Locked 2026-07-05 after research: bge-small beats MiniLM-class on quality at the same CPU latency class; nli-deberta-v3-small is the sbert-documented entailment cross-encoder, CPU-viable, which SummaC-style faithfulness needs. See RESEARCH.md. |
+| No ROUGE/BLEU | n-gram metrics excluded everywhere | SummEval showed weak human correlation; embedding + NLI methods used instead. |
+| No code execution in v1 | static analysis ladder for code tasks | Executing arbitrary pasted code is a safety/dependency problem; HumanEval-style pass@k logged as judge-mode-era future work. |
+| No toxicity metric in v1 | deferred | Lexicon approaches false-positive heavily; a proper local classifier is future work. |
 | Scoring adapter | `Scorer` interface with `LocalScorer` now; `LLMJudgeScorer` later (BYO-key free tier, our-key paid tier) | Required by brief. Interface lands in Step 1. |
 | Frontend | Decided at Step 2 (leaning React/Next.js + Vercel) | Not needed before Checkpoint 2. |
 | Document evaluation | Deferred decision until the text pipeline exists | Include only if nearly free per brief. |
