@@ -329,8 +329,10 @@ def code_validity(ctx: EvalContext) -> ParameterScore:
                 evidence=[Evidence(quote=snippet(b.code, 200))]))
             score -= 40
     for name in result.requested_names_missing:
+        # INVALID_CODE (not INCOMPLETE_COVERAGE) so the repair routes to the
+        # code builder; the coverage builder expects question parts.
         findings.append(Finding(
-            failure_mode=FailureMode.INCOMPLETE_COVERAGE,
+            failure_mode=FailureMode.INVALID_CODE,
             detail=f'The prompt asks for "{name}" but it never appears in the code.',
             data={"missing_name": name}))
         score -= 20

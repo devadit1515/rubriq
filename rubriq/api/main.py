@@ -6,8 +6,13 @@ Run:  uvicorn rubriq.api.main:app --reload
 
 from __future__ import annotations
 
+import os
+import threading
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .. import models
 from ..schemas import EvalReport, EvalRequest
@@ -42,10 +47,30 @@ def evaluate(request: EvalRequest, engine: str = "local") -> EvalReport:
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "engines": list(_SCORERS), "models": models.availability()}
+    # Reports without loading: a health probe must never block on model I/O.
+    return {"status": "ok", "engines": list(_SCORERS), "models": models.loaded()}
+
+
+@app.on_event("startup")
+def _warm_models_in_background() -> None:
+    threading.Thread(target=models.availability, daemon=True).start()
 
 
 @app.post("/warmup")
 def warmup() -> dict:
     """Load both local models so the first evaluation doesn't pay the cost."""
     return models.availability()
+
+
+# Serve the frontend when a web/ directory is present (local dev and the
+# single-container HF Spaces deploy). Mounted last so API routes win.
+# RUBRIQ_WEB_DIR overrides; otherwise try repo layout, then CWD (Docker).
+_candidates = [
+    Path(os.environ["RUBRIQ_WEB_DIR"]) if os.environ.get("RUBRIQ_WEB_DIR") else None,
+    Path(__file__).resolve().parents[2] / "web",
+    Path.cwd() / "web",
+]
+for _web_dir in filter(None, _candidates):
+    if _web_dir.is_dir():
+        app.mount("/", StaticFiles(directory=_web_dir, html=True), name="web")
+        break

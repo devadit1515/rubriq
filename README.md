@@ -1,3 +1,15 @@
+---
+title: Rubriq
+emoji: 🔬
+colorFrom: green
+colorTo: gray
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+short_description: Score LLM outputs locally; get repair prompts that fix them
+---
+
 # Rubriq
 
 Paste the prompt you gave an LLM and the output you got back. Rubriq scores

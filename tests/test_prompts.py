@@ -82,6 +82,16 @@ def test_code_repair_names_defects():
     assert "fix each" in code.prompt_text.lower()
 
 
+def test_no_empty_coverage_repair_on_code():
+    """Regression: missing requested function names must route to the code
+    repair, never produce a '0 parts unanswered' coverage card."""
+    report = run(samples.CODE_PROMPT, samples.CODE_BAD)
+    for ip in report.improvement_prompts:
+        assert "0 part(s)" not in ip.diagnosis
+        if ip.failure_mode == FailureMode.INCOMPLETE_COVERAGE:
+            assert 'e.g. ""' not in ip.diagnosis
+
+
 def test_technique_sources_cited():
     report = run(samples.SUMM_PROMPT, samples.SUMM_BAD, model="gpt-4o")
     for ip in report.improvement_prompts:

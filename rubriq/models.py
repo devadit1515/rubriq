@@ -58,7 +58,13 @@ def get_nli():
 
 
 def availability() -> dict[str, bool]:
+    """Force-loads both models and reports the outcome (use for warmup)."""
     return {
         "embeddings": get_embedder() is not None,
         "nli": get_nli() is not None,
     }
+
+
+def loaded() -> dict[str, bool]:
+    """Reports current state WITHOUT loading anything (safe for /health)."""
+    return {"embeddings": _embedder is not None, "nli": _nli is not None}

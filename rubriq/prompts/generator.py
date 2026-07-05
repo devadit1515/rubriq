@@ -150,13 +150,15 @@ def _build_constraints(findings, task, profile: Profile) -> ImprovementPrompt:
     )
 
 
-def _build_coverage(findings, task, profile: Profile) -> ImprovementPrompt:
+def _build_coverage(findings, task, profile: Profile) -> ImprovementPrompt | None:
     parts = []
     for f in findings:
         q = next((e.quote for e in f.evidence if e.source == "prompt"), None)
         if q:
             parts.append(q)
-    part_list = "\n".join(f"{i+1}. {p}" for i, p in enumerate(parts)) or "1. (see report)"
+    if not parts:
+        return None   # nothing quotable to enumerate; no honest repair possible
+    part_list = "\n".join(f"{i+1}. {p}" for i, p in enumerate(parts))
     body = (
         f"{_source_block(profile, task)}"
         f"{task.instruction.strip()}\n\n"
@@ -448,7 +450,9 @@ def generate_improvement_prompts(
     prompts: list[ImprovementPrompt] = []
     for mode in _SEVERITY:
         if mode in by_mode and mode in _BUILDERS:
-            prompts.append(_BUILDERS[mode](by_mode[mode], task, profile))
+            built = _BUILDERS[mode](by_mode[mode], task, profile)
+            if built is not None:
+                prompts.append(built)
         if len(prompts) >= MAX_PROMPTS:
             break
     return prompts
